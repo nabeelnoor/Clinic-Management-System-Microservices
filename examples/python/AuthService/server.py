@@ -33,6 +33,19 @@ class TestUser:
         self.birthDate=birthDate
 UserDB={}  #global datbase to store user data.
 
+class TestEmploy:
+    def __init__(self,EmpId,Name,BirthDate,Gender,Qualification,Fees,DeptID,Role,Password):
+        self.EmpId=EmpId
+        self.Name=Name
+        self.BirthDate=BirthDate
+        self.Gender=Gender
+        self.Qualification=Qualification
+        self.Fees=Fees
+        self.DeptID=DeptID
+        self.Role=Role
+        self.Password=Password
+EmpDB={}
+
 class SecretClass:
     def __init__(self,token,role):
         self.token=token
@@ -57,19 +70,26 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
         if(request.UserID not in UserDB):
             retmsg="Successful"
             UserDB[request.UserID]=TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender)
-        # for each in UserDB:
-        #     print(each.name,each.email)
         print("\n---------------------\n")
         return AuthService_pb2.UserRegisterationResponse(response=retmsg)
     
     def AuthenticateUser(self, request, context):
-        retMsg="Not Successful";
+        retMsg="Not Successful"
         generatedToken="Null"
         if(request.UserID in UserDB):
             generatedToken=hashlib.sha256(request.UserID.encode("utf-8")).hexdigest()
             TokenDB[request.UserID]=SecretClass(generatedToken,"user")
         return AuthService_pb2.UserAuthenticationResponse(response=retMsg,secretKey=generatedToken)
     
+    def RegisterEmploy(self,request,context):
+        retMsg="Not Successful"
+        if(request.EmpID not in EmpDB):
+            retMsg="Successful"
+            EmpDB[request.EmpID]=TestEmploy(request.EmpID,request.Name,request.BirthDate,request.Gender,request.Qualification,request.Fees,request.DeptID,request.role,request.Password)
+        return AuthService_pb2.EmployRegisterationResponse(response=retMsg)
+    
+    # def AuthenticateEmploy(self,request,context):
+        
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     AuthService_pb2_grpc.add_AuthServiceServicer_to_server(AuthServiceClass(), server)

@@ -40,6 +40,16 @@ class AuthServiceStub(object):
                 request_serializer=AuthService__pb2.UserCredentialRequest.SerializeToString,
                 response_deserializer=AuthService__pb2.UserAuthenticationResponse.FromString,
                 )
+        self.RegisterEmploy = channel.unary_unary(
+                '/AuthService.AuthService/RegisterEmploy',
+                request_serializer=AuthService__pb2.EmployRegisterCredential.SerializeToString,
+                response_deserializer=AuthService__pb2.EmployRegisterationResponse.FromString,
+                )
+        self.AuthenticateEmploy = channel.unary_unary(
+                '/AuthService.AuthService/AuthenticateEmploy',
+                request_serializer=AuthService__pb2.EmployCredentialRequest.SerializeToString,
+                response_deserializer=AuthService__pb2.EmployAuthenticationResponse.FromString,
+                )
 
 
 class AuthServiceServicer(object):
@@ -77,6 +87,18 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def RegisterEmploy(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AuthenticateEmploy(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -104,6 +126,16 @@ def add_AuthServiceServicer_to_server(servicer, server):
                     servicer.AuthenticateUser,
                     request_deserializer=AuthService__pb2.UserCredentialRequest.FromString,
                     response_serializer=AuthService__pb2.UserAuthenticationResponse.SerializeToString,
+            ),
+            'RegisterEmploy': grpc.unary_unary_rpc_method_handler(
+                    servicer.RegisterEmploy,
+                    request_deserializer=AuthService__pb2.EmployRegisterCredential.FromString,
+                    response_serializer=AuthService__pb2.EmployRegisterationResponse.SerializeToString,
+            ),
+            'AuthenticateEmploy': grpc.unary_unary_rpc_method_handler(
+                    servicer.AuthenticateEmploy,
+                    request_deserializer=AuthService__pb2.EmployCredentialRequest.FromString,
+                    response_serializer=AuthService__pb2.EmployAuthenticationResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -198,5 +230,39 @@ class AuthService(object):
         return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/AuthenticateUser',
             AuthService__pb2.UserCredentialRequest.SerializeToString,
             AuthService__pb2.UserAuthenticationResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def RegisterEmploy(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/RegisterEmploy',
+            AuthService__pb2.EmployRegisterCredential.SerializeToString,
+            AuthService__pb2.EmployRegisterationResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AuthenticateEmploy(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/AuthenticateEmploy',
+            AuthService__pb2.EmployCredentialRequest.SerializeToString,
+            AuthService__pb2.EmployAuthenticationResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

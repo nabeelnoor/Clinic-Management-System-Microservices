@@ -30,6 +30,9 @@ service AuthService {
 
   rpc RegisterUser (UserRegisterCredential) returns (UserRegisterationResponse) {}
   rpc AuthenticateUser (UserCredentialRequest) returns (UserAuthenticationResponse) {}
+  
+  rpc RegisterEmploy (EmployRegisterCredential) returns (EmployRegisterationResponse) {}
+  rpc AuthenticateEmploy (EmployCredentialRequest) returns (EmployAuthenticationResponse) {}
 }
 
 message UserRegisterCredential{
@@ -54,6 +57,32 @@ message UserAuthenticationResponse{
   string secretKey=2;  //push this secret key to list  [ {secretKey,Role=[Admin,Doctor,Patient]} ,make hash of userid and password to generate unique string]
 }
 
+//--------------------------------Employ
+message EmployRegisterCredential{
+string EmpID=1;  //email id.
+string Qualification=2;
+int32 Fees=3;
+int32 DeptID=4;
+string role=5; //['D','A']   ===>same backend data. 
+string Name=6;
+string BirthDate=7;
+string Gender=8;
+string Password=9;
+}
+
+message EmployRegisterationResponse{
+  string response=1; //success or error response
+}
+
+message EmployCredentialRequest{
+  string EmpID=1;  //email
+  string Password=2; 
+}
+
+message EmployAuthenticationResponse{
+  string response=1;
+  string secretKey=2;  //push this secret key to list  [ {secretKey,Role=[Admin,Doctor,Patient]} ,make hash of userid and password to generate unique string]
+}
 
 
 
