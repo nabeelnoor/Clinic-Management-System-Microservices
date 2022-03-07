@@ -77,6 +77,7 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
         retMsg="Not Successful"
         generatedToken="Null"
         if(request.UserID in UserDB):
+            retMsg="Successful"
             generatedToken=hashlib.sha256(request.UserID.encode("utf-8")).hexdigest()
             TokenDB[request.UserID]=SecretClass(generatedToken,"user")
         return AuthService_pb2.UserAuthenticationResponse(response=retMsg,secretKey=generatedToken)
@@ -88,7 +89,15 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
             EmpDB[request.EmpID]=TestEmploy(request.EmpID,request.Name,request.BirthDate,request.Gender,request.Qualification,request.Fees,request.DeptID,request.role,request.Password)
         return AuthService_pb2.EmployRegisterationResponse(response=retMsg)
     
-    # def AuthenticateEmploy(self,request,context):
+    def AuthenticateEmploy(self,request,context):
+        retMsg="Not Successful"
+        if(request.EmpID in EmpDB):
+            retMsg="Successful"
+            generatedToken=hashlib.sha256(request.EmpID.encode("utf-8")).hexdigest()
+            currentEmp=EmpDB[request.EmpID]
+            print("CurrentRole:",currentEmp.Role)
+            TokenDB[request.EmpID]=SecretClass(generatedToken,currentEmp.Role)
+        return AuthService_pb2.EmployAuthenticationResponse(response=retMsg,secretKey=generatedToken)
         
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

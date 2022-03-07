@@ -48,8 +48,14 @@ def run():
 
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
         stub = AuthService_pb2_grpc.AuthServiceStub(channel)
-        response = stub.RegisterEmploy(AuthService_pb2.EmployRegisterCredential(EmpID="nab@gmail.com",Name="Nabeel",BirthDate="12/2/1999",Password="123",Gender='Male',Qualification="PHD",Fees=100,role="Doctor",DeptID=1))
+        response = stub.RegisterEmploy(AuthService_pb2.EmployRegisterCredential(EmpID="doctor@gmail.com",Name="Nabeel",BirthDate="12/2/1999",Password="123",Gender='Male',Qualification="PHD",Fees=100,role="Doctor",DeptID=1))
     print("AuthService client received: " + response.response)
+
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.AuthenticateEmploy(AuthService_pb2.EmployCredentialRequest(EmpID="doctor@gmail.com",Password="123"))
+    print("AuthService client received: " + response.response)
+    print("Secret Token:"+response.secretKey)
    
 
 if __name__ == '__main__':
