@@ -14,14 +14,46 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x41uthService.proto\x12\x0b\x41uthService\"\x1c\n\x0cHelloRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x1d\n\nHelloReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"&\n\x0eLotteryRequest\x12\x14\n\x0crandomNumber\x18\x01 \x01(\x05\"#\n\x0fLotteryResponse\x12\x10\n\x08response\x18\x01 \x01(\t2\xe7\x01\n\x0b\x41uthService\x12@\n\x08SayHello\x12\x19.AuthService.HelloRequest\x1a\x17.AuthService.HelloReply\"\x00\x12\x45\n\rSayHelloAgain\x12\x19.AuthService.HelloRequest\x1a\x17.AuthService.HelloReply\"\x00\x12O\n\x10LotteryGenerator\x12\x1b.AuthService.LotteryRequest\x1a\x1c.AuthService.LotteryResponse\"\x00\x42\x38\n\x1cio.grpc.examples.AuthServiceB\x10\x41uthServiceProtoP\x01\xa2\x02\x03HLWb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x41uthService.proto\x12\x0b\x41uthService\"k\n\x16UserRegisterCredential\x12\x0e\n\x06UserID\x18\x01 \x01(\t\x12\x0c\n\x04Name\x18\x02 \x01(\t\x12\x11\n\tBirthDate\x18\x03 \x01(\t\x12\x10\n\x08Password\x18\x04 \x01(\t\x12\x0e\n\x06Gender\x18\x05 \x01(\t\"-\n\x19UserRegisterationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"9\n\x15UserCredentialRequest\x12\x0e\n\x06UserID\x18\x01 \x01(\t\x12\x10\n\x08Password\x18\x02 \x01(\t\"A\n\x1aUserAuthenticationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\x12\x11\n\tsecretkey\x18\x02 \x01(\t\"\x1c\n\x0cHelloRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x1d\n\nHelloReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"&\n\x0eLotteryRequest\x12\x14\n\x0crandomNumber\x18\x01 \x01(\x05\"#\n\x0fLotteryResponse\x12\x10\n\x08response\x18\x01 \x01(\t2\xa9\x03\n\x0b\x41uthService\x12@\n\x08SayHello\x12\x19.AuthService.HelloRequest\x1a\x17.AuthService.HelloReply\"\x00\x12\x45\n\rSayHelloAgain\x12\x19.AuthService.HelloRequest\x1a\x17.AuthService.HelloReply\"\x00\x12O\n\x10LotteryGenerator\x12\x1b.AuthService.LotteryRequest\x1a\x1c.AuthService.LotteryResponse\"\x00\x12]\n\x0cRegisterUser\x12#.AuthService.UserRegisterCredential\x1a&.AuthService.UserRegisterationResponse\"\x00\x12\x61\n\x10\x41uthenticateUser\x12\".AuthService.UserCredentialRequest\x1a\'.AuthService.UserAuthenticationResponse\"\x00\x42\x38\n\x1cio.grpc.examples.AuthServiceB\x10\x41uthServiceProtoP\x01\xa2\x02\x03HLWb\x06proto3')
 
 
 
+_USERREGISTERCREDENTIAL = DESCRIPTOR.message_types_by_name['UserRegisterCredential']
+_USERREGISTERATIONRESPONSE = DESCRIPTOR.message_types_by_name['UserRegisterationResponse']
+_USERCREDENTIALREQUEST = DESCRIPTOR.message_types_by_name['UserCredentialRequest']
+_USERAUTHENTICATIONRESPONSE = DESCRIPTOR.message_types_by_name['UserAuthenticationResponse']
 _HELLOREQUEST = DESCRIPTOR.message_types_by_name['HelloRequest']
 _HELLOREPLY = DESCRIPTOR.message_types_by_name['HelloReply']
 _LOTTERYREQUEST = DESCRIPTOR.message_types_by_name['LotteryRequest']
 _LOTTERYRESPONSE = DESCRIPTOR.message_types_by_name['LotteryResponse']
+UserRegisterCredential = _reflection.GeneratedProtocolMessageType('UserRegisterCredential', (_message.Message,), {
+  'DESCRIPTOR' : _USERREGISTERCREDENTIAL,
+  '__module__' : 'AuthService_pb2'
+  # @@protoc_insertion_point(class_scope:AuthService.UserRegisterCredential)
+  })
+_sym_db.RegisterMessage(UserRegisterCredential)
+
+UserRegisterationResponse = _reflection.GeneratedProtocolMessageType('UserRegisterationResponse', (_message.Message,), {
+  'DESCRIPTOR' : _USERREGISTERATIONRESPONSE,
+  '__module__' : 'AuthService_pb2'
+  # @@protoc_insertion_point(class_scope:AuthService.UserRegisterationResponse)
+  })
+_sym_db.RegisterMessage(UserRegisterationResponse)
+
+UserCredentialRequest = _reflection.GeneratedProtocolMessageType('UserCredentialRequest', (_message.Message,), {
+  'DESCRIPTOR' : _USERCREDENTIALREQUEST,
+  '__module__' : 'AuthService_pb2'
+  # @@protoc_insertion_point(class_scope:AuthService.UserCredentialRequest)
+  })
+_sym_db.RegisterMessage(UserCredentialRequest)
+
+UserAuthenticationResponse = _reflection.GeneratedProtocolMessageType('UserAuthenticationResponse', (_message.Message,), {
+  'DESCRIPTOR' : _USERAUTHENTICATIONRESPONSE,
+  '__module__' : 'AuthService_pb2'
+  # @@protoc_insertion_point(class_scope:AuthService.UserAuthenticationResponse)
+  })
+_sym_db.RegisterMessage(UserAuthenticationResponse)
+
 HelloRequest = _reflection.GeneratedProtocolMessageType('HelloRequest', (_message.Message,), {
   'DESCRIPTOR' : _HELLOREQUEST,
   '__module__' : 'AuthService_pb2'
@@ -55,14 +87,22 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n\034io.grpc.examples.AuthServiceB\020AuthServiceProtoP\001\242\002\003HLW'
-  _HELLOREQUEST._serialized_start=34
-  _HELLOREQUEST._serialized_end=62
-  _HELLOREPLY._serialized_start=64
-  _HELLOREPLY._serialized_end=93
-  _LOTTERYREQUEST._serialized_start=95
-  _LOTTERYREQUEST._serialized_end=133
-  _LOTTERYRESPONSE._serialized_start=135
-  _LOTTERYRESPONSE._serialized_end=170
-  _AUTHSERVICE._serialized_start=173
-  _AUTHSERVICE._serialized_end=404
+  _USERREGISTERCREDENTIAL._serialized_start=34
+  _USERREGISTERCREDENTIAL._serialized_end=141
+  _USERREGISTERATIONRESPONSE._serialized_start=143
+  _USERREGISTERATIONRESPONSE._serialized_end=188
+  _USERCREDENTIALREQUEST._serialized_start=190
+  _USERCREDENTIALREQUEST._serialized_end=247
+  _USERAUTHENTICATIONRESPONSE._serialized_start=249
+  _USERAUTHENTICATIONRESPONSE._serialized_end=314
+  _HELLOREQUEST._serialized_start=316
+  _HELLOREQUEST._serialized_end=344
+  _HELLOREPLY._serialized_start=346
+  _HELLOREPLY._serialized_end=375
+  _LOTTERYREQUEST._serialized_start=377
+  _LOTTERYREQUEST._serialized_end=415
+  _LOTTERYRESPONSE._serialized_start=417
+  _LOTTERYRESPONSE._serialized_end=452
+  _AUTHSERVICE._serialized_start=455
+  _AUTHSERVICE._serialized_end=880
 # @@protoc_insertion_point(module_scope)

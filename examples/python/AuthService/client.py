@@ -26,14 +26,19 @@ def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
-    with grpc.insecure_channel('localhost:50052') as channel:
-        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
-        response = stub.SayHello(AuthService_pb2.HelloRequest(name='you'))
-    print("AuthService client received: " + response.message)
+    # with grpc.insecure_channel('localhost:50052') as channel:
+    #     stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+    #     response = stub.SayHello(AuthService_pb2.HelloRequest(name='you'))
+    # print("AuthService client received: " + response.message)
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
         stub = AuthService_pb2_grpc.AuthServiceStub(channel)
         response = stub.SayHelloAgain(AuthService_pb2.HelloRequest(name='you'))
     print("AuthService client received: " + response.message)
+
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.RegisterUser(AuthService_pb2.UserRegisterCredential(UserID="nab@gmail.com",Name="Nabeel",BirthDate="12/2/1999",Password="123",Gender='Male'))
+    print("AuthService client received: " + response.response)
     # with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
     #     stub = AuthService_pb2_grpc.AuthServiceStub(channel)
     #     response = stub.LotteryGenerator(AuthService_pb2.LotteryRequest(randomNumber=11))
@@ -43,3 +48,7 @@ def run():
 if __name__ == '__main__':
     logging.basicConfig()
     run()
+
+
+
+#Wrap all Flask apis inside this to make communication with the client.

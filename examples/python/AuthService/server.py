@@ -23,6 +23,17 @@ import AuthService_pb2_grpc
 from StaffManager_pb2_grpc import StaffManagementStub 
 import StaffManager_pb2
 
+# my global working space act as db
+class TestUser:
+    def __init__(self,name,email,password,birthDate,gender):
+        self.name=name
+        self.email=email
+        self.password=password
+        self.gender=gender
+        self.birthDate=birthDate
+UserDB=[]  #global datbase to store user data.
+
+# my global working space act as db
 class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
 
     def SayHello(self, request, context):
@@ -35,6 +46,14 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
     def SayHelloAgain(self, request, context):
         return AuthService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
 
+    def RegisterUser(self,request,context):
+        retmsg="Not Successful"
+        UserDB.append(TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender))
+        for each in UserDB:
+            print(each.name,each.email)
+            retmsg="Successful"
+
+        return AuthService_pb2.UserRegisterationResponse(response=retmsg)
     # def LotteryGenerator(self, request, context):
     #     testVariable=""
     #     if(request.randomNumber<10):
