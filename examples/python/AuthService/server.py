@@ -15,7 +15,7 @@
 
 from concurrent import futures
 import logging
-
+import hashlib
 import grpc
 import AuthService_pb2
 import AuthService_pb2_grpc
@@ -31,7 +31,13 @@ class TestUser:
         self.password=password
         self.gender=gender
         self.birthDate=birthDate
-UserDB=[]  #global datbase to store user data.
+UserDB={}  #global datbase to store user data.
+
+class SecretClass:
+    def __init__(self,token,role):
+        self.token=token
+        self.role=role
+TokenDB={}  #to make token
 
 # my global working space act as db
 class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
@@ -48,21 +54,22 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
 
     def RegisterUser(self,request,context):
         retmsg="Not Successful"
-        UserDB.append(TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender))
-        for each in UserDB:
-            print(each.name,each.email)
+        if(request.UserID not in UserDB):
             retmsg="Successful"
+            UserDB[request.UserID]=TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender)
+        # for each in UserDB:
+        #     print(each.name,each.email)
         print("\n---------------------\n")
-
         return AuthService_pb2.UserRegisterationResponse(response=retmsg)
-    # def LotteryGenerator(self, request, context):
-    #     testVariable=""
-    #     if(request.randomNumber<10):
-    #         testVariable="Yes"
-    #     else:
-    #         testVariable="No"
-    #     return AuthService_pb2.LotteryResponse(response=testVariable)
-
+    
+    def AuthenticateUser(self, request, context):
+        retMsg="Not Successful";
+        generatedToken="Null"
+        if(request.UserID in UserDB):
+            generatedToken=hashlib.sha256(request.UserID.encode("utf-8")).hexdigest()
+            TokenDB[request.UserID]=SecretClass(generatedToken,"user")
+        return AuthService_pb2.UserAuthenticationResponse(response=retMsg,secretKey=generatedToken)
+    
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     AuthService_pb2_grpc.add_AuthServiceServicer_to_server(AuthServiceClass(), server)

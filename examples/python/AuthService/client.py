@@ -39,6 +39,12 @@ def run():
         stub = AuthService_pb2_grpc.AuthServiceStub(channel)
         response = stub.RegisterUser(AuthService_pb2.UserRegisterCredential(UserID="nab@gmail.com",Name="Nabeel",BirthDate="12/2/1999",Password="123",Gender='Male'))
     print("AuthService client received: " + response.response)
+
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.AuthenticateUser(AuthService_pb2.UserCredentialRequest(UserID="nab2@gmail.com",Password="123"))
+    print("AuthService client received: " + response.response)
+    print("SecretToken:"+response.secretKey)
     # with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
     #     stub = AuthService_pb2_grpc.AuthServiceStub(channel)
     #     response = stub.LotteryGenerator(AuthService_pb2.LotteryRequest(randomNumber=11))

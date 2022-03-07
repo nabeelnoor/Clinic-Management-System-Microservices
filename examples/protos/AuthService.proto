@@ -51,7 +51,7 @@ message UserCredentialRequest{
 
 message UserAuthenticationResponse{
   string response=1;
-  string secretkey=2;  //push this secret key to list  [ {secretKey,Role=[Admin,Doctor,Patient]} ,make hash of userid and password to generate unique string]
+  string secretKey=2;  //push this secret key to list  [ {secretKey,Role=[Admin,Doctor,Patient]} ,make hash of userid and password to generate unique string]
 }
 
 
