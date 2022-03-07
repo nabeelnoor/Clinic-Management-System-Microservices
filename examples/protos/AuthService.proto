@@ -27,8 +27,52 @@ service AuthService {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
   rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
   rpc LotteryGenerator (LotteryRequest) returns (LotteryResponse) {}
+
+  rpc RegisterUser (UserRegisterCredential) returns (UserRegisterationResponse) {}
+  rpc AuthenticateUser (UserCredentialRequest) returns (UserAuthenticationResponse) {}
 }
 
+message UserRegisterCredential{
+string UserID=1;  //which is email id.
+string Name=2;
+string BirthDate=3;
+string Password=4; //string
+string Gender=5; //make check on frontend [M,F,N]
+}
+
+message UserRegisterationResponse{
+  string response=1; //success or error response
+}
+
+message UserCredentialRequest{
+  string UserID=1;  //email
+  string Password=2; 
+}
+
+message UserAuthenticationResponse{
+  string response=1;
+  string secretkey=2;  //push this secret key to list  [ {secretKey,Role=[Admin,Doctor,Patient]} ,make hash of userid and password to generate unique string]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-------------------------------------------------deprecated one
 // The request message containing the user's name.
 message HelloRequest {
   string name = 1;
