@@ -35,7 +35,8 @@ class StaffManagement(StaffManager_pb2_grpc.StaffManagement):
         return StaffManager_pb2.LotteryResponse(response=testVariable)
 
     def addDoctorProfile(self,request,context):
-        return StaffManager_pb2.StorageReponse(message="Working")
+        returnString="Doctor whose name {} has Salaray {}".format(request.DoctorID,request.Fees)
+        return StaffManager_pb2.StorageReponse(message=returnString)
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
