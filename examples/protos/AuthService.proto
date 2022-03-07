@@ -14,26 +14,36 @@
 
 syntax = "proto3";
 
-option java_package = "ex.grpc";
-option objc_class_prefix = "HSW";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.AuthService";
+option java_outer_classname = "AuthServiceProto";
+option objc_class_prefix = "HLW";
 
-package hellostreamingworld;
+package AuthService;
 
 // The greeting service definition.
-service MultiGreeter {
-  // Sends multiple greetings
-  rpc sayHello (HelloRequest) returns (stream HelloReply) {}
+service AuthService {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+  rpc LotteryGenerator (LotteryRequest) returns (LotteryResponse) {}
 }
 
-// The request message containing the user's name and how many greetings
-// they want.
+// The request message containing the user's name.
 message HelloRequest {
   string name = 1;
-  string num_greetings = 2;
 }
 
-// A response message containing a greeting
+// The response message containing the greetings
 message HelloReply {
   string message = 1;
 }
 
+//for the lottery function 
+message LotteryRequest{
+  int32 randomNumber =1;
+}
+//reponse is yes/no
+message LotteryResponse{
+  string response=1;
+}

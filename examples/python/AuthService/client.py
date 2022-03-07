@@ -11,15 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""The Python implementation of the GRPC helloworld.Greeter client."""
+"""The Python implementation of the GRPC AuthService.AuthService client."""
 
 from __future__ import print_function
 
 import logging
 
 import grpc
-import helloworld_pb2
-import helloworld_pb2_grpc
+import AuthService_pb2
+import AuthService_pb2_grpc
 
 
 def run():
@@ -27,17 +27,17 @@ def run():
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
     with grpc.insecure_channel('localhost:50052') as channel:
-        stub = helloworld_pb2_grpc.GreeterStub(channel)
-        response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
-    print("Greeter client received: " + response.message)
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.SayHello(AuthService_pb2.HelloRequest(name='you'))
+    print("AuthService client received: " + response.message)
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
-        stub = helloworld_pb2_grpc.GreeterStub(channel)
-        response = stub.SayHelloAgain(helloworld_pb2.HelloRequest(name='you'))
-    print("Greeter client received: " + response.message)
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.SayHelloAgain(AuthService_pb2.HelloRequest(name='you'))
+    print("AuthService client received: " + response.message)
     # with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
-    #     stub = helloworld_pb2_grpc.GreeterStub(channel)
-    #     response = stub.LotteryGenerator(helloworld_pb2.LotteryRequest(randomNumber=11))
-    # print("Greeter client received: " + response.response)
+    #     stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+    #     response = stub.LotteryGenerator(AuthService_pb2.LotteryRequest(randomNumber=11))
+    # print("AuthService client received: " + response.response)
 
 
 if __name__ == '__main__':
