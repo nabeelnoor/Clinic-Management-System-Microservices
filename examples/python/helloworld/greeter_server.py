@@ -17,17 +17,14 @@ from concurrent import futures
 import logging
 
 import grpc
-import helloworld_pb2
-import helloworld_pb2_grpc
+import StaffManager_pb2
+import StaffManager_pb2_grpc
+from StaffManager_pb2_grpc import StaffManagement
 
-
-class Greeter(helloworld_pb2_grpc.GreeterServicer):
-
-    def SayHello(self, request, context):
-        return helloworld_pb2.HelloReply(message='Hello, %s!' % request.name)
+class StaffManagement(StaffManager_pb2_grpc.StaffManagement):
 
     def SayHelloAgain(self, request, context):
-        return helloworld_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
+        return StaffManager_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
 
     def LotteryGenerator(self, request, context):
         testVariable=""
@@ -35,11 +32,14 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
             testVariable="Yes"
         else:
             testVariable="No"
-        return helloworld_pb2.LotteryResponse(response=testVariable)
+        return StaffManager_pb2.LotteryResponse(response=testVariable)
+
+    def addDoctorProfile(self,request,context):
+        return StaffManager_pb2.StorageReponse(message="Working")
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
+    StaffManager_pb2_grpc.add_StaffManagementServicer_to_server(StaffManagement(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
     server.wait_for_termination()
