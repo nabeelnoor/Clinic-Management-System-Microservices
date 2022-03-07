@@ -1,4 +1,4 @@
-// Copyright 2018 gRPC authors.
+// Copyright 2015 gRPC authors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,20 +14,27 @@
 
 syntax = "proto3";
 
-package keyvaluestore;
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.staff";
+option java_outer_classname = "StaffProto";
+option objc_class_prefix = "SM";
 
-// A simple key-value storage service
-service KeyValueStore {
-  // Provides a value for each key request
-  rpc GetValues (stream Request) returns (stream Response) {}
+package staff;
+
+// The greeting service definition.
+service StaffManager {
+  // manage staff
+  rpc AddDoctor (AddDoc) returns (AddDocReply) {}
 }
 
-// The request message containing the key
-message Request {
-  string key = 1;
+// The request message containing the user's name.
+message AddDoc {
+  int32 docID =1;	
+  string name = 2;
+  string title=3;
 }
 
-// The response message containing the value associated with the key
-message Response {
-  string value = 1;
+// The response message containing the greetings
+message AddDocReply {
+  string message = 1;
 }

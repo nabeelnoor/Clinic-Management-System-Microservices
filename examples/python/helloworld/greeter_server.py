@@ -19,6 +19,8 @@ import logging
 import grpc
 import helloworld_pb2
 import helloworld_pb2_grpc
+import staff_pb2
+import staff_pb2_grpc
 
 
 class Greeter(helloworld_pb2_grpc.GreeterServicer):
@@ -31,15 +33,22 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
 
     def LotteryGenerator(self, request, context):
         testVariable=""
-        if(request.randomNumber<10):
+        if(request.randomNumber>10):
             testVariable="Yes"
         else:
             testVariable="No"
         return helloworld_pb2.LotteryResponse(response=testVariable)
 
+class StaffManager(staff_pb2_grpc.StaffManagerServicer):
+
+    def AddDoctor(self, request, context):
+        return staff_pb2.AddDocReply(message='Hello, %s!' % request.name+request.title)
+
+
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
+    staff_pb2_grpc.add_StaffManagerServicer_to_server(StaffManager(),server)
     server.add_insecure_port('[::]:50051')
     server.start()
     server.wait_for_termination()

@@ -20,6 +20,8 @@ import logging
 import grpc
 import helloworld_pb2
 import helloworld_pb2_grpc
+import staff_pb2
+import staff_pb2_grpc
 
 
 def run():
@@ -27,9 +29,9 @@ def run():
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
     with grpc.insecure_channel('localhost:50051') as channel:
-        stub = helloworld_pb2_grpc.GreeterStub(channel)
-        response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
-    print("Greeter client received: " + response.message)
+        stub = staff_pb2_grpc.StaffManagerStub(channel)
+        response = stub.AddDoctor(staff_pb2.AddDoc(docID=1,name='zulfi',title='dentist'))
+    print("Staff client received: " + response.message)
     with grpc.insecure_channel('localhost:50051') as channel: #for another grpc call
         stub = helloworld_pb2_grpc.GreeterStub(channel)
         response = stub.SayHelloAgain(helloworld_pb2.HelloRequest(name='you'))
