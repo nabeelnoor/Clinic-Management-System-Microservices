@@ -52,6 +52,7 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
         for each in UserDB:
             print(each.name,each.email)
             retmsg="Successful"
+        print("\n---------------------\n")
 
         return AuthService_pb2.UserRegisterationResponse(response=retmsg)
     # def LotteryGenerator(self, request, context):
