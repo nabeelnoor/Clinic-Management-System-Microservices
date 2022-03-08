@@ -62,7 +62,7 @@ message EmployRegisterCredential{
 string EmpID=1;  //email id.
 string Qualification=2;
 int32 Fees=3;
-int32 DeptID=4;
+string DeptID=4;
 string role=5; //['D','A']   ===>same backend data. 
 string Name=6;
 string BirthDate=7;
