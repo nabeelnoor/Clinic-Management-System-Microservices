@@ -70,7 +70,7 @@ def mongo():
         return globalClient
 # my global working space act as db
 
-# Databases functions
+# ---------------------------------------------------------------Databases functions
 def isUserPresent(email):
     client = mongo()
     mydb = client["myFirstDatabase"]        
@@ -93,6 +93,7 @@ def DBStoreUser(UserData):
     x = mycol.insert_one(currRecord)
     return True
 
+# ---------------------------------------------------------------Databases functions
 class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
 
     def SayHello(self, request, context):
