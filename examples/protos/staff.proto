@@ -24,7 +24,7 @@ package staff;
 // The greeting service definition.
 service StaffManager {
   // manage staff
-  rpc AddDoctor (AddDoc) returns (AddDocReply) {}
+  // rpc AddDoctor (AddDoc) returns (AddDocReply) {}
   rpc AddDepart (AddDept) returns (AddDeptReply) {}
   rpc ListDoctor (listDoc) returns (listDocReply) {}
   rpc ListDepart (listDept) returns (listDeptReply) {}
@@ -33,23 +33,18 @@ service StaffManager {
 // The request message containing the user's name.
 message AddDoc {
   int32 EmpID =1;	
-  string name = 2;
-  string BirthDate = 3;
-  string Gender =4;
-  int32 Fees=5;
-  string Qualification=6;
-  string Role=7;
+  string Qualification=2;
+  int32 Fees=3;
+  string DeptID=4;
+  string role=5;
+  string Name=6;
+  string BirthDate=7;
+  string Gender=8;
+  string Password=9;
 }
 
-// The response message containing the greetings
-message AddDocReply {
-  string message = 1;
-}
-
-
-message AddDept {
-  int32 DeptID =1;	
-  string name = 2;
+message AddDept {	
+  string name = 1;
 }
 
 // The response message containing the greetings
@@ -57,7 +52,9 @@ message AddDeptReply {
   string message = 1;
 }
 
-message listDoc {}
+message listDoc{
+  string deptId=1;
+}
 
 message listDocReply {
   repeated AddDoc message = 1;

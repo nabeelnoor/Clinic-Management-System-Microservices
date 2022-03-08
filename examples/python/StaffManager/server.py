@@ -17,8 +17,6 @@ from concurrent import futures
 import logging
 
 import grpc
-import helloworld_pb2
-import helloworld_pb2_grpc
 import staff_pb2
 import staff_pb2_grpc
 from pymongo import MongoClient
@@ -28,7 +26,7 @@ from pymongo import MongoClient
 
 def mongo():
     global client
-    cluster = "mongodb+srv://zulfi:zulkifal123@cluster0.bmxg5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    cluster = "mongodb+srv://HAdmin:nabeel123@cluster0.ypgny.mongodb.net/HMSDB?retryWrites=true&w=majority"
     client = MongoClient(cluster)
     # print(client.list_database_names())
     db = client.myFirstDatabase
@@ -36,31 +34,14 @@ def mongo():
    # print(db.list_collection_names())
 
 
-class Greeter(helloworld_pb2_grpc.GreeterServicer):
-
-    def SayHello(self, request, context):
-        return helloworld_pb2.HelloReply(message='Hello, %s!' % request.name)
-
-    def SayHelloAgain(self, request, context):
-        return helloworld_pb2.HelloReply(message='Hello Again, %s!' % request.name)
-
-    def LotteryGenerator(self, request, context):
-        testVariable = ""
-        if(request.randomNumber > 10):
-            testVariable = "Yes"
-        else:
-            testVariable = "No"
-        return helloworld_pb2.LotteryResponse(response=testVariable)
-
-
 class StaffManager(staff_pb2_grpc.StaffManagerServicer):
-    def AddDoctor(self, request, context):
-        print(client.list_database_names())
-        mydb = client["myFirstDatabase"]        
-        mycol = mydb["doctors"]
-        mydict = {"name": request.name, "BirthDate": request.BirthDate,"Gender":request.Gender,"Fees":request.Fees,"Qualification":request.Qualification,"Role":request.Role}
-        x = mycol.insert_one(mydict)
-        return staff_pb2.AddDocReply(message='Hello, %s!' % request.name)
+    # def AddDoctor(self, request, context):
+    #     print(client.list_database_names())
+    #     mydb = client["myFirstDatabase"]        
+    #     mycol = mydb["doctors"]
+    #     mydict = {"name": request.name, "BirthDate": request.BirthDate,"Gender":request.Gender,"Fees":request.Fees,"Qualification":request.Qualification,"Role":request.Role}
+    #     x = mycol.insert_one(mydict)
+    #     return staff_pb2.AddDocReply(message='Hello, %s!' % request.name)
     
     def AddDepart(self, request, context):
         print(client.list_database_names())
@@ -68,17 +49,17 @@ class StaffManager(staff_pb2_grpc.StaffManagerServicer):
         mycol = mydb["dept"]
         mydict = {"name": request.name}
         x = mycol.insert_one(mydict)
-        return staff_pb2.AddDeptReply(message='Hello, %s!' % request.name)
+        return staff_pb2.AddDeptReply(message="Successful")
     
     def ListDoctor(self, request, context):
         array = []
         arr1 = []
         print(client.list_database_names())
         mydb = client["myFirstDatabase"]        
-        mycol = mydb["doctors"]
+        mycol = mydb["Emp"]
         print(mycol)
         for x in mycol.find({}, {'_id': False}):
-            # print(x)
+            print("\ndataType:",x)
             array.append(x)
         #print(array)
         return staff_pb2.listDocReply(message=array)
@@ -102,7 +83,6 @@ def serve():
     # print(client.list_database_names())
     mongo()
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
     staff_pb2_grpc.add_StaffManagerServicer_to_server(StaffManager(), server)
     server.add_insecure_port('[::]:50053')
     server.start()

@@ -15,11 +15,6 @@ class StaffManagerStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.AddDoctor = channel.unary_unary(
-                '/staff.StaffManager/AddDoctor',
-                request_serializer=staff__pb2.AddDoc.SerializeToString,
-                response_deserializer=staff__pb2.AddDocReply.FromString,
-                )
         self.AddDepart = channel.unary_unary(
                 '/staff.StaffManager/AddDepart',
                 request_serializer=staff__pb2.AddDept.SerializeToString,
@@ -41,15 +36,10 @@ class StaffManagerServicer(object):
     """The greeting service definition.
     """
 
-    def AddDoctor(self, request, context):
-        """manage staff
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def AddDepart(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """manage staff
+        rpc AddDoctor (AddDoc) returns (AddDocReply) {}
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -69,11 +59,6 @@ class StaffManagerServicer(object):
 
 def add_StaffManagerServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'AddDoctor': grpc.unary_unary_rpc_method_handler(
-                    servicer.AddDoctor,
-                    request_deserializer=staff__pb2.AddDoc.FromString,
-                    response_serializer=staff__pb2.AddDocReply.SerializeToString,
-            ),
             'AddDepart': grpc.unary_unary_rpc_method_handler(
                     servicer.AddDepart,
                     request_deserializer=staff__pb2.AddDept.FromString,
@@ -99,23 +84,6 @@ def add_StaffManagerServicer_to_server(servicer, server):
 class StaffManager(object):
     """The greeting service definition.
     """
-
-    @staticmethod
-    def AddDoctor(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/staff.StaffManager/AddDoctor',
-            staff__pb2.AddDoc.SerializeToString,
-            staff__pb2.AddDocReply.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def AddDepart(request,
