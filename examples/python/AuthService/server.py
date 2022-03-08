@@ -161,10 +161,16 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
         array=[]
         with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
             stub = StaffManagerStub(channel)
-            response = stub.ListDoctor(staff_pb2.listDoc(deptId="Heart"))
+            response = stub.ListDoctor(staff_pb2.listDoc(deptId=request.deptId))
             for x in response.message:
                 array.append(x)
         return staff_pb2.listDocReply(message=array)
+    
+    def AddDepartment(self, request, context):
+        with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
+            stub = StaffManagerStub(channel)
+            response = stub.AddDepart(staff_pb2.AddDept(name=request.name))
+        return staff_pb2.AddDeptReply(message=response.message)
 
     def SayHelloAgain(self, request, context):
         return AuthService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 

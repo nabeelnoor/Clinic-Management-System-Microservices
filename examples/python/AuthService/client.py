@@ -103,6 +103,14 @@ def getAllDoc():
     print("After json:",finalResponse)
     return jsonify({'response':finalResponse})
 
+@app.route("/addDept",methods=['Post'])
+def addDepartment():
+    reqBody=request.json
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.AddDepartment(AuthService_pb2.staff__pb2.AddDept(name=reqBody["name"]))
+    return jsonify({'response':response.message})
+
 def run():
 
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call

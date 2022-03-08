@@ -61,6 +61,11 @@ class AuthServiceStub(object):
                 request_serializer=staff__pb2.listDoc.SerializeToString,
                 response_deserializer=staff__pb2.listDocReply.FromString,
                 )
+        self.AddDepartment = channel.unary_unary(
+                '/AuthService.AuthService/AddDepartment',
+                request_serializer=staff__pb2.AddDept.SerializeToString,
+                response_deserializer=staff__pb2.AddDeptReply.FromString,
+                )
 
 
 class AuthServiceServicer(object):
@@ -123,6 +128,12 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AddDepartment(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -170,6 +181,11 @@ def add_AuthServiceServicer_to_server(servicer, server):
                     servicer.ListOfAllDoctor,
                     request_deserializer=staff__pb2.listDoc.FromString,
                     response_serializer=staff__pb2.listDocReply.SerializeToString,
+            ),
+            'AddDepartment': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddDepartment,
+                    request_deserializer=staff__pb2.AddDept.FromString,
+                    response_serializer=staff__pb2.AddDeptReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -332,5 +348,22 @@ class AuthService(object):
         return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/ListOfAllDoctor',
             staff__pb2.listDoc.SerializeToString,
             staff__pb2.listDocReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddDepartment(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/AddDepartment',
+            staff__pb2.AddDept.SerializeToString,
+            staff__pb2.AddDeptReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
