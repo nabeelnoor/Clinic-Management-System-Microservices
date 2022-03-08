@@ -18,24 +18,24 @@ from locale import currency
 import logging
 import hashlib
 import grpc
-import AuthService_pb2
-import AuthService_pb2_grpc
+import RecordService_pb2
+import RecordService_pb2_grpc
 
-from StaffManager_pb2_grpc import StaffManagementStub 
-import StaffManager_pb2
+# from StaffManager_pb2_grpc import StaffManagementStub 
+# import StaffManager_pb2
 from pymongo import MongoClient # to make connection with mongoDB
 
 #Databases Schemas
-class TestUser:
+class Payment:
     def __init__(self,name,email,password,birthDate,gender):
         self.name=name
         self.email=email
         self.password=password
         self.gender=gender
         self.birthDate=birthDate
-UserDB={}  #global datbase to store user data.
 
-class TestEmploy:
+
+class Appointment:
     def __init__(self,EmpId,Name,BirthDate,Gender,Qualification,Fees,DeptID,Role,Password):
         self.EmpId=EmpId
         self.Name=Name
@@ -46,7 +46,10 @@ class TestEmploy:
         self.DeptID=DeptID
         self.Role=Role
         self.Password=Password
-EmpDB={}
+
+class Prescription:
+    def __init__(self,name):
+        self.name=name
 
 class SecretClass:
     def __init__(self,token,role):
@@ -141,58 +144,19 @@ def DBauthEmp(email,password):
     return True,dbResponse["Role"]
     
 # -----------------------------------------------------------------------Databases functions
-class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
+class RecordServiceClass(RecordService_pb2_grpc.RecordServiceServicer):
 
     def SayHello(self, request, context):
-        with grpc.insecure_channel('localhost:50051') as channel: #for another grpc call
-            stub = StaffManagementStub(channel)
-            response = stub.addDoctorProfile(StaffManager_pb2.DoctorDetials(DoctorID="Doc0001",Password="abcd",Qualification="Qualified",DeptID=100,Fees=2,JobTitle="Senior Doctor"))
-        print("Greeter client received: " + response.message)
-        return AuthService_pb2.HelloReply(message='Hello, %s!' % response)
+        return RecordService_pb2.HelloReply(message='Hello')
 
     def SayHelloAgain(self, request, context):
-        return AuthService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
+        return RecordService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
 
-    def RegisterUser(self,request,context):
-        retmsg="Not Successful"
-        currUser=TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender)
-        dbResponse=DBStoreUser(currUser)
-        if(dbResponse==True):
-            retmsg="Successful"
-        print("\n-----------Inside User Registeration----------\n")
-        return AuthService_pb2.UserRegisterationResponse(response=retmsg)
-    
-    def AuthenticateUser(self, request, context):
-        retMsg="Not Successful"
-        generatedToken="Null"
-        if(DBauthUser(request.UserID,request.Password)==True):
-            retMsg="Successful"
-            generatedToken=hashlib.sha256(request.UserID.encode("utf-8")).hexdigest()
-            TokenDB[request.UserID]=SecretClass(generatedToken,"user")
-        return AuthService_pb2.UserAuthenticationResponse(response=retMsg,secretKey=generatedToken)
-    
-    def RegisterEmploy(self,request,context):
-        retMsg="Not Successful"
-        currEmp=TestEmploy(request.EmpID,request.Name,request.BirthDate,request.Gender,request.Qualification,request.Fees,request.DeptID,request.role,request.Password)
-        if(DBstoreEmp(currEmp)==True):
-            retMsg="Successful"
-        return AuthService_pb2.EmployRegisterationResponse(response=retMsg)
-    
-    def AuthenticateEmploy(self,request,context):
-        retMsg="Not Successful"
-        generatedToken="Null"
-        flag,responseRole=DBauthEmp(request.EmpID,request.Password)
-        if(flag==True):
-            retMsg="Successful"
-            generatedToken=hashlib.sha256(request.EmpID.encode("utf-8")).hexdigest()
-            print("CurrentRole:",responseRole)
-            TokenDB[request.EmpID]=SecretClass(generatedToken,responseRole)
-        return AuthService_pb2.EmployAuthenticationResponse(response=retMsg,secretKey=generatedToken)
         
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    AuthService_pb2_grpc.add_AuthServiceServicer_to_server(AuthServiceClass(), server)
-    server.add_insecure_port('[::]:50052')
+    RecordService_pb2_grpc.add_RecordServiceServicer_to_server(RecordServiceClass(), server)
+    server.add_insecure_port('[::]:50054')
     server.start()
     server.wait_for_termination()
 
