@@ -29,18 +29,22 @@ def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
-    with grpc.insecure_channel('localhost:50051') as channel:
+    with grpc.insecure_channel('localhost:50053') as channel:
         stub = staff_pb2_grpc.StaffManagerStub(channel)
-        response = stub.AddDoctor(staff_pb2.AddDoc(docID=1,name='zulfi',title='dentist'))
+        response = stub.AddDoctor(staff_pb2.AddDoc(EmpID=1,name='zulfi',BirthDate='05-06-1990',Gender='M',Fees=5000,Qualification='MBBS',Role='D'))
     print("Staff client received: " + response.message)
-    with grpc.insecure_channel('localhost:50051') as channel: #for another grpc call
-        stub = helloworld_pb2_grpc.GreeterStub(channel)
-        response = stub.SayHelloAgain(helloworld_pb2.HelloRequest(name='you'))
-    print("Greeter client received: " + response.message)
-    with grpc.insecure_channel('localhost:50051') as channel: #for another grpc call
-        stub = helloworld_pb2_grpc.GreeterStub(channel)
-        response = stub.LotteryGenerator(helloworld_pb2.LotteryRequest(randomNumber=11))
-    print("Greeter client received: " + response.response)
+    with grpc.insecure_channel('localhost:50053') as channel:
+        stub = staff_pb2_grpc.StaffManagerStub(channel)
+        response = stub.AddDepart(staff_pb2.AddDept(DeptID=1,name='Heart'))
+    print("Staff client received: " + response.message)
+    with grpc.insecure_channel('localhost:50053') as channel:
+        stub = staff_pb2_grpc.StaffManagerStub(channel)
+        response = stub.ListDoctor(staff_pb2.listDoc())
+    print(response.message)
+    with grpc.insecure_channel('localhost:50053') as channel:
+        stub = staff_pb2_grpc.StaffManagerStub(channel)
+        response = stub.ListDepart(staff_pb2.listDept())
+    print(response.message)
 
 
 if __name__ == '__main__':

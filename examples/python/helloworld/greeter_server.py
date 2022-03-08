@@ -24,12 +24,15 @@ import staff_pb2_grpc
 from pymongo import MongoClient
 
 
+
+
 def mongo():
+    global client
     cluster = "mongodb+srv://zulfi:zulkifal123@cluster0.bmxg5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
     client = MongoClient(cluster)
     # print(client.list_database_names())
     db = client.myFirstDatabase
-    return client
+    # return client
    # print(db.list_collection_names())
 
 
@@ -52,22 +55,56 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
 
 class StaffManager(staff_pb2_grpc.StaffManagerServicer):
     def AddDoctor(self, request, context):
-        client = mongo()
         print(client.list_database_names())
         mydb = client["myFirstDatabase"]        
         mycol = mydb["doctors"]
-        mydict = {"name": request.name, "title": request.title}
+        mydict = {"name": request.name, "BirthDate": request.BirthDate,"Gender":request.Gender,"Fees":request.Fees,"Qualification":request.Qualification,"Role":request.Role}
         x = mycol.insert_one(mydict)
-        return staff_pb2.AddDocReply(message='Hello, %s!' % request.name+request.title)
+        return staff_pb2.AddDocReply(message='Hello, %s!' % request.name)
+    
+    def AddDepart(self, request, context):
+        print(client.list_database_names())
+        mydb = client["myFirstDatabase"]        
+        mycol = mydb["dept"]
+        mydict = {"name": request.name}
+        x = mycol.insert_one(mydict)
+        return staff_pb2.AddDeptReply(message='Hello, %s!' % request.name)
+    
+    def ListDoctor(self, request, context):
+        array = []
+        arr1 = []
+        print(client.list_database_names())
+        mydb = client["myFirstDatabase"]        
+        mycol = mydb["doctors"]
+        print(mycol)
+        for x in mycol.find({}, {'_id': False}):
+            # print(x)
+            array.append(x)
+        #print(array)
+        return staff_pb2.listDocReply(message=array)
+    
+    def ListDepart(self, request, context):
+        array = []
+        arr1 = []
+        print(client.list_database_names())
+        mydb = client["myFirstDatabase"]        
+        mycol = mydb["dept"]
+        print(mycol)
+        for x in mycol.find({}, {'_id': False}):
+            # print(x)
+            array.append(x)
+        #print(array)
+        return staff_pb2.listDeptReply(message=array)
 
 
 def serve():
     # client=mongo() pip install pymongo dnspython
     # print(client.list_database_names())
+    mongo()
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
     staff_pb2_grpc.add_StaffManagerServicer_to_server(StaffManager(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:50053')
     server.start()
     server.wait_for_termination()
 

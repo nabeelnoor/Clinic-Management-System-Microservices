@@ -14,12 +14,18 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bstaff.proto\x12\x05staff\"4\n\x06\x41\x64\x64\x44oc\x12\r\n\x05\x64ocID\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05title\x18\x03 \x01(\t\"\x1e\n\x0b\x41\x64\x64\x44ocReply\x12\x0f\n\x07message\x18\x01 \x01(\t2@\n\x0cStaffManager\x12\x30\n\tAddDoctor\x12\r.staff.AddDoc\x1a\x12.staff.AddDocReply\"\x00\x42+\n\x16io.grpc.examples.staffB\nStaffProtoP\x01\xa2\x02\x02SMb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bstaff.proto\x12\x05staff\"{\n\x06\x41\x64\x64\x44oc\x12\r\n\x05\x45mpID\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tBirthDate\x18\x03 \x01(\t\x12\x0e\n\x06Gender\x18\x04 \x01(\t\x12\x0c\n\x04\x46\x65\x65s\x18\x05 \x01(\x05\x12\x15\n\rQualification\x18\x06 \x01(\t\x12\x0c\n\x04Role\x18\x07 \x01(\t\"\x1e\n\x0b\x41\x64\x64\x44ocReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"\'\n\x07\x41\x64\x64\x44\x65pt\x12\x0e\n\x06\x44\x65ptID\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x1f\n\x0c\x41\x64\x64\x44\x65ptReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"\t\n\x07listDoc\".\n\x0clistDocReply\x12\x1e\n\x07message\x18\x01 \x03(\x0b\x32\r.staff.AddDoc\"\n\n\x08listDept\"0\n\rlistDeptReply\x12\x1f\n\x07message\x18\x01 \x03(\x0b\x32\x0e.staff.AddDept2\xe0\x01\n\x0cStaffManager\x12\x30\n\tAddDoctor\x12\r.staff.AddDoc\x1a\x12.staff.AddDocReply\"\x00\x12\x32\n\tAddDepart\x12\x0e.staff.AddDept\x1a\x13.staff.AddDeptReply\"\x00\x12\x33\n\nListDoctor\x12\x0e.staff.listDoc\x1a\x13.staff.listDocReply\"\x00\x12\x35\n\nListDepart\x12\x0f.staff.listDept\x1a\x14.staff.listDeptReply\"\x00\x42+\n\x16io.grpc.examples.staffB\nStaffProtoP\x01\xa2\x02\x02SMb\x06proto3')
 
 
 
 _ADDDOC = DESCRIPTOR.message_types_by_name['AddDoc']
 _ADDDOCREPLY = DESCRIPTOR.message_types_by_name['AddDocReply']
+_ADDDEPT = DESCRIPTOR.message_types_by_name['AddDept']
+_ADDDEPTREPLY = DESCRIPTOR.message_types_by_name['AddDeptReply']
+_LISTDOC = DESCRIPTOR.message_types_by_name['listDoc']
+_LISTDOCREPLY = DESCRIPTOR.message_types_by_name['listDocReply']
+_LISTDEPT = DESCRIPTOR.message_types_by_name['listDept']
+_LISTDEPTREPLY = DESCRIPTOR.message_types_by_name['listDeptReply']
 AddDoc = _reflection.GeneratedProtocolMessageType('AddDoc', (_message.Message,), {
   'DESCRIPTOR' : _ADDDOC,
   '__module__' : 'staff_pb2'
@@ -34,15 +40,69 @@ AddDocReply = _reflection.GeneratedProtocolMessageType('AddDocReply', (_message.
   })
 _sym_db.RegisterMessage(AddDocReply)
 
+AddDept = _reflection.GeneratedProtocolMessageType('AddDept', (_message.Message,), {
+  'DESCRIPTOR' : _ADDDEPT,
+  '__module__' : 'staff_pb2'
+  # @@protoc_insertion_point(class_scope:staff.AddDept)
+  })
+_sym_db.RegisterMessage(AddDept)
+
+AddDeptReply = _reflection.GeneratedProtocolMessageType('AddDeptReply', (_message.Message,), {
+  'DESCRIPTOR' : _ADDDEPTREPLY,
+  '__module__' : 'staff_pb2'
+  # @@protoc_insertion_point(class_scope:staff.AddDeptReply)
+  })
+_sym_db.RegisterMessage(AddDeptReply)
+
+listDoc = _reflection.GeneratedProtocolMessageType('listDoc', (_message.Message,), {
+  'DESCRIPTOR' : _LISTDOC,
+  '__module__' : 'staff_pb2'
+  # @@protoc_insertion_point(class_scope:staff.listDoc)
+  })
+_sym_db.RegisterMessage(listDoc)
+
+listDocReply = _reflection.GeneratedProtocolMessageType('listDocReply', (_message.Message,), {
+  'DESCRIPTOR' : _LISTDOCREPLY,
+  '__module__' : 'staff_pb2'
+  # @@protoc_insertion_point(class_scope:staff.listDocReply)
+  })
+_sym_db.RegisterMessage(listDocReply)
+
+listDept = _reflection.GeneratedProtocolMessageType('listDept', (_message.Message,), {
+  'DESCRIPTOR' : _LISTDEPT,
+  '__module__' : 'staff_pb2'
+  # @@protoc_insertion_point(class_scope:staff.listDept)
+  })
+_sym_db.RegisterMessage(listDept)
+
+listDeptReply = _reflection.GeneratedProtocolMessageType('listDeptReply', (_message.Message,), {
+  'DESCRIPTOR' : _LISTDEPTREPLY,
+  '__module__' : 'staff_pb2'
+  # @@protoc_insertion_point(class_scope:staff.listDeptReply)
+  })
+_sym_db.RegisterMessage(listDeptReply)
+
 _STAFFMANAGER = DESCRIPTOR.services_by_name['StaffManager']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n\026io.grpc.examples.staffB\nStaffProtoP\001\242\002\002SM'
   _ADDDOC._serialized_start=22
-  _ADDDOC._serialized_end=74
-  _ADDDOCREPLY._serialized_start=76
-  _ADDDOCREPLY._serialized_end=106
-  _STAFFMANAGER._serialized_start=108
-  _STAFFMANAGER._serialized_end=172
+  _ADDDOC._serialized_end=145
+  _ADDDOCREPLY._serialized_start=147
+  _ADDDOCREPLY._serialized_end=177
+  _ADDDEPT._serialized_start=179
+  _ADDDEPT._serialized_end=218
+  _ADDDEPTREPLY._serialized_start=220
+  _ADDDEPTREPLY._serialized_end=251
+  _LISTDOC._serialized_start=253
+  _LISTDOC._serialized_end=262
+  _LISTDOCREPLY._serialized_start=264
+  _LISTDOCREPLY._serialized_end=310
+  _LISTDEPT._serialized_start=312
+  _LISTDEPT._serialized_end=322
+  _LISTDEPTREPLY._serialized_start=324
+  _LISTDEPTREPLY._serialized_end=372
+  _STAFFMANAGER._serialized_start=375
+  _STAFFMANAGER._serialized_end=599
 # @@protoc_insertion_point(module_scope)

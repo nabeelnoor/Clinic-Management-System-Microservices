@@ -25,16 +25,46 @@ package staff;
 service StaffManager {
   // manage staff
   rpc AddDoctor (AddDoc) returns (AddDocReply) {}
+  rpc AddDepart (AddDept) returns (AddDeptReply) {}
+  rpc ListDoctor (listDoc) returns (listDocReply) {}
+  rpc ListDepart (listDept) returns (listDeptReply) {}
 }
 
 // The request message containing the user's name.
 message AddDoc {
-  int32 docID =1;	
+  int32 EmpID =1;	
   string name = 2;
-  string title=3;
+  string BirthDate = 3;
+  string Gender =4;
+  int32 Fees=5;
+  string Qualification=6;
+  string Role=7;
 }
 
 // The response message containing the greetings
 message AddDocReply {
   string message = 1;
+}
+
+
+message AddDept {
+  int32 DeptID =1;	
+  string name = 2;
+}
+
+// The response message containing the greetings
+message AddDeptReply {
+  string message = 1;
+}
+
+message listDoc {}
+
+message listDocReply {
+  repeated AddDoc message = 1;
+}
+
+message listDept {}
+
+message listDeptReply {
+  repeated AddDept message = 1;
 }
