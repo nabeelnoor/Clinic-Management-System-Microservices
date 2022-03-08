@@ -14,6 +14,7 @@
 """The Python implementation of the GRPC helloworld.Greeter server."""
 
 from concurrent import futures
+from locale import currency
 import logging
 import hashlib
 import grpc
@@ -22,8 +23,9 @@ import AuthService_pb2_grpc
 
 from StaffManager_pb2_grpc import StaffManagementStub 
 import StaffManager_pb2
+from pymongo import MongoClient # to make connection with mongoDB
 
-# my global working space act as db
+#Databases Schemas
 class TestUser:
     def __init__(self,name,email,password,birthDate,gender):
         self.name=name
@@ -52,7 +54,45 @@ class SecretClass:
         self.role=role
 TokenDB={}  #to make token
 
+# Schemas for DB end here
+
+globalClient=None
+def mongo():
+    global globalClient #to use it as the global variable
+    if(globalClient==None):
+        cluster = "mongodb+srv://HAdmin:nabeel123@cluster0.ypgny.mongodb.net/HMSDB?retryWrites=true&w=majority"
+        client = MongoClient(cluster)
+        # print(client.list_database_names())
+        db = client.myFirstDatabase
+        globalClient=client
+        return globalClient
+    else:
+        return globalClient
 # my global working space act as db
+
+# Databases functions
+def isUserPresent(email):
+    client = mongo()
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["Users"]
+    dbResponse=mycol.find_one({"UserID":email})
+    print(dbResponse)
+    if(dbResponse==None):
+        return False
+    else:
+        return True
+
+def DBStoreUser(UserData):    
+    client = mongo()
+    print(client.list_database_names())
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["Users"]
+    if(isUserPresent(UserData.email)==True):
+        return False
+    currRecord = {"UserID":UserData.email,"Name":UserData.name,"BirthDate":UserData.birthDate,"Password":UserData.password,"Gender":UserData.gender}
+    x = mycol.insert_one(currRecord)
+    return True
+
 class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
 
     def SayHello(self, request, context):
@@ -67,9 +107,10 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
 
     def RegisterUser(self,request,context):
         retmsg="Not Successful"
-        if(request.UserID not in UserDB):
+        currUser=TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender)
+        dbResponse=DBStoreUser(currUser)
+        if(dbResponse==True):
             retmsg="Successful"
-            UserDB[request.UserID]=TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender)
         print("\n-----------Inside User Registeration----------\n")
         return AuthService_pb2.UserRegisterationResponse(response=retmsg)
     
