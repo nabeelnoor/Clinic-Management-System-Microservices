@@ -93,6 +93,53 @@ def DBStoreUser(UserData):
     x = mycol.insert_one(currRecord)
     return True
 
+def DBauthUser(email,password):
+    client = mongo()
+    print(client.list_database_names())
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["Users"]
+    dbResponse=mycol.find_one({"UserID":email})
+    if(dbResponse==None):
+        return False
+    if(dbResponse["Password"]!=password):
+        return False
+    return True
+
+def isEmpPresent(email):
+    client = mongo()
+    print(client.list_database_names())
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["Emp"]
+    dbResponse=mycol.find_one({"EmpID":email})
+    print(dbResponse)
+    if(dbResponse==None):
+        return False
+    else:
+        return True
+
+def DBstoreEmp(EmpData):
+    client = mongo()
+    print(client.list_database_names())
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["Emp"]
+    if(isEmpPresent(EmpData.EmpId)==True):
+        return False
+    currRecord = {"EmpID":EmpData.EmpId,"Name":EmpData.Name,"BirthDate":EmpData.BirthDate,"Password":EmpData.Password,"Gender":EmpData.Gender,"Qualification":EmpData.Qualification,"DeptID":EmpData.DeptID,"Role":EmpData.Role,"Fees":EmpData.Fees}
+    x = mycol.insert_one(currRecord)
+    return True
+
+def DBauthEmp(email,password):
+    client = mongo()
+    print(client.list_database_names())
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["Emp"]
+    dbResponse=mycol.find_one({"EmpID":email})
+    if(dbResponse==None):
+        return False,None
+    if(dbResponse["Password"]!=password):
+        return False,None
+    return True,dbResponse["Role"]
+    
 # ---------------------------------------------------------------Databases functions
 class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
 
@@ -118,7 +165,7 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
     def AuthenticateUser(self, request, context):
         retMsg="Not Successful"
         generatedToken="Null"
-        if(request.UserID in UserDB):
+        if(DBauthUser(request.UserID,request.Password)==True):
             retMsg="Successful"
             generatedToken=hashlib.sha256(request.UserID.encode("utf-8")).hexdigest()
             TokenDB[request.UserID]=SecretClass(generatedToken,"user")
@@ -126,20 +173,20 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
     
     def RegisterEmploy(self,request,context):
         retMsg="Not Successful"
-        if(request.EmpID not in EmpDB):
+        currEmp=TestEmploy(request.EmpID,request.Name,request.BirthDate,request.Gender,request.Qualification,request.Fees,request.DeptID,request.role,request.Password)
+        if(DBstoreEmp(currEmp)==True):
             retMsg="Successful"
-            EmpDB[request.EmpID]=TestEmploy(request.EmpID,request.Name,request.BirthDate,request.Gender,request.Qualification,request.Fees,request.DeptID,request.role,request.Password)
         return AuthService_pb2.EmployRegisterationResponse(response=retMsg)
     
     def AuthenticateEmploy(self,request,context):
         retMsg="Not Successful"
         generatedToken="Null"
-        if(request.EmpID in EmpDB):
+        flag,responseRole=DBauthEmp(request.EmpID,request.Password)
+        if(flag==True):
             retMsg="Successful"
             generatedToken=hashlib.sha256(request.EmpID.encode("utf-8")).hexdigest()
-            currentEmp=EmpDB[request.EmpID]
-            print("CurrentRole:",currentEmp.Role)
-            TokenDB[request.EmpID]=SecretClass(generatedToken,currentEmp.Role)
+            print("CurrentRole:",responseRole)
+            TokenDB[request.EmpID]=SecretClass(generatedToken,responseRole)
         return AuthService_pb2.EmployAuthenticationResponse(response=retMsg,secretKey=generatedToken)
         
 def serve():
