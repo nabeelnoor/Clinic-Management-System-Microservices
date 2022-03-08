@@ -77,6 +77,11 @@ class AuthServiceStub(object):
                 request_serializer=RecordService__pb2.CompleteApp.SerializeToString,
                 response_deserializer=RecordService__pb2.CompleteAppReply.FromString,
                 )
+        self.GetAllAppointment = channel.unary_unary(
+                '/AuthService.AuthService/GetAllAppointment',
+                request_serializer=RecordService__pb2.getApp.SerializeToString,
+                response_deserializer=RecordService__pb2.getAppReply.FromString,
+                )
 
 
 class AuthServiceServicer(object):
@@ -158,6 +163,12 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetAllAppointment(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -220,6 +231,11 @@ def add_AuthServiceServicer_to_server(servicer, server):
                     servicer.CompleteAppointment3,
                     request_deserializer=RecordService__pb2.CompleteApp.FromString,
                     response_serializer=RecordService__pb2.CompleteAppReply.SerializeToString,
+            ),
+            'GetAllAppointment': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllAppointment,
+                    request_deserializer=RecordService__pb2.getApp.FromString,
+                    response_serializer=RecordService__pb2.getAppReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -433,5 +449,22 @@ class AuthService(object):
         return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/CompleteAppointment3',
             RecordService__pb2.CompleteApp.SerializeToString,
             RecordService__pb2.CompleteAppReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetAllAppointment(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/GetAllAppointment',
+            RecordService__pb2.getApp.SerializeToString,
+            RecordService__pb2.getAppReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

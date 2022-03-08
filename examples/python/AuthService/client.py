@@ -127,6 +127,23 @@ def completeAppointmentFunc():
         response = stub.CompleteAppointment3(AuthService_pb2.RecordService__pb2.CompleteApp(UserId=reqBody["UserId"],EmpId=reqBody["EmpId"],Date=reqBody["Date"]))
     return jsonify({'response':response.message})
 
+@app.route("/getAppointment",methods=['Post'])
+def getAllApp():
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.GetAllAppointment(AuthService_pb2.RecordService__pb2.getApp())
+        print(response)
+        finalResponse=[]
+        for each in response.message:
+            print(each)
+            # finalResponse.append({"EmpID": each.EmpID,"Qualification":each.Qualification,"Fees":each.Fees,"DeptID":each.DeptID,"Role":each.Role,"Name":each.Name,"BirthDate":each.BirthDate,"Gender":each.Gender })
+    print("finalResponse:",finalResponse)
+    finalResponse=json.dumps(finalResponse)
+    finalResponse=json.loads(finalResponse)
+    print("After json:",finalResponse)
+    return jsonify({'response':finalResponse})
+
+
 def run():
 
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call

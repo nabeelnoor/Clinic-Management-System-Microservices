@@ -160,6 +160,19 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
             stub=RecordServiceStub(channel)
             response=stub.CompleteAppointment(RecordService_pb2.CompleteApp(UserId=request.UserId,EmpId=request.EmpId,Date=request.Date))
         return RecordService_pb2.CompleteAppReply(message=response.message)
+    
+    def GetAllAppointment(self,request,context):
+        array=[]
+        with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
+            stub = RecordServiceStub(channel)
+            response = stub.CompleteAppointment(RecordService_pb2.getApp())
+            print("\n\n-------------OK-------------\n\n")
+            print("Wokring inside:",response)
+            print("Main type is:",type(response))
+            for x in response.message:  #to covert particular into array(main bug)
+                print(x)
+                array.append(x)
+        return RecordService_pb2.getAppReply(message=array)
 
     def ListOfAllDept(self, request, context):
         array=[]
