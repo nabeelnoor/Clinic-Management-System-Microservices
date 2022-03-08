@@ -30,6 +30,16 @@ class RecordServiceStub(object):
                 request_serializer=RecordService__pb2.MKAppRequest.SerializeToString,
                 response_deserializer=RecordService__pb2.MKAppResponse.FromString,
                 )
+        self.getAppointment = channel.unary_unary(
+                '/RecordService.RecordService/getAppointment',
+                request_serializer=RecordService__pb2.getApp.SerializeToString,
+                response_deserializer=RecordService__pb2.getAppReply.FromString,
+                )
+        self.CompleteAppointment = channel.unary_unary(
+                '/RecordService.RecordService/CompleteAppointment',
+                request_serializer=RecordService__pb2.CompleteApp.SerializeToString,
+                response_deserializer=RecordService__pb2.CompleteAppReply.FromString,
+                )
 
 
 class RecordServiceServicer(object):
@@ -55,6 +65,18 @@ class RecordServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def getAppointment(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CompleteAppointment(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RecordServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -72,6 +94,16 @@ def add_RecordServiceServicer_to_server(servicer, server):
                     servicer.makeAppointment,
                     request_deserializer=RecordService__pb2.MKAppRequest.FromString,
                     response_serializer=RecordService__pb2.MKAppResponse.SerializeToString,
+            ),
+            'getAppointment': grpc.unary_unary_rpc_method_handler(
+                    servicer.getAppointment,
+                    request_deserializer=RecordService__pb2.getApp.FromString,
+                    response_serializer=RecordService__pb2.getAppReply.SerializeToString,
+            ),
+            'CompleteAppointment': grpc.unary_unary_rpc_method_handler(
+                    servicer.CompleteAppointment,
+                    request_deserializer=RecordService__pb2.CompleteApp.FromString,
+                    response_serializer=RecordService__pb2.CompleteAppReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -132,5 +164,39 @@ class RecordService(object):
         return grpc.experimental.unary_unary(request, target, '/RecordService.RecordService/makeAppointment',
             RecordService__pb2.MKAppRequest.SerializeToString,
             RecordService__pb2.MKAppResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def getAppointment(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/RecordService.RecordService/getAppointment',
+            RecordService__pb2.getApp.SerializeToString,
+            RecordService__pb2.getAppReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CompleteAppointment(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/RecordService.RecordService/CompleteAppointment',
+            RecordService__pb2.CompleteApp.SerializeToString,
+            RecordService__pb2.CompleteAppReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

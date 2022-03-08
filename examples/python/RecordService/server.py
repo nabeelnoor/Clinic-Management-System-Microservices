@@ -14,6 +14,7 @@
 """The Python implementation of the GRPC helloworld.Greeter server."""
 
 from concurrent import futures
+from email import message
 from locale import currency
 import logging
 import hashlib
@@ -65,7 +66,7 @@ globalClient=None
 def mongo():
     global globalClient #to use it as the global variable
     if(globalClient==None):
-        cluster = "mongodb+srv://HAdmin:nabeel123@cluster0.ypgny.mongodb.net/HMSDB?retryWrites=true&w=majority"
+        cluster = "mongodb+srv://zulfi:zulkifal123@cluster0.bmxg5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
         client = MongoClient(cluster)
         # print(client.list_database_names())
         db = client.myFirstDatabase
@@ -123,11 +124,37 @@ class RecordServiceClass(RecordService_pb2_grpc.RecordServiceServicer):
         return RecordService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
 
     def makeAppointment(self, request, context):
-        tokenNumber=-1
-        appID=1
-        if(tokenNumber==-1):
-            return RecordService_pb2.MKAppResponse(response="Unsuccessful",AppId=appID,TokenNumber=tokenNumber)
-        return RecordService_pb2.MKAppResponse(response="Successful",AppId=appID,TokenNumber=tokenNumber)
+        client = mongo()
+        mydb = client["myFirstDatabase"]        
+        mycol = mydb["appointment"]
+        appoint = {"UserId":request.UserId,"EmpId":request.EmpId,"Date":request.Date,"Status":'false'}
+        x = mycol.insert_one(appoint)      #insert appointment of an user with empid
+        return RecordService_pb2.MKAppResponse(message="Appointment Booked Successfully at "+request.Date)
+    
+    def getAppointment(self, request, context):
+        client = mongo()
+        array = []
+        print(client.list_database_names())
+        mydb = client["myFirstDatabase"]        
+        mycol = mydb["appointment"]
+        print(mycol)
+        for x in mycol.find({"Status":"false"}, {'_id': False}):
+            # print(x)
+            array.append(x)  #returns list of all appointments
+        #print(array)
+        return RecordService_pb2.getAppReply(message=array)
+    
+    def CompleteAppointment(self, request, context):
+        client = mongo()
+        array = []
+        print(client.list_database_names())
+        mydb = client["myFirstDatabase"]        
+        mycol = mydb["appointment"]
+        myquery = { "UserId": request.UserId,"EmpId":request.EmpId,"Date":request.Date }
+        newvalues = { "$set": { "Status": "true" } }
+
+        mycol.update_one(myquery, newvalues)
+        return RecordService_pb2.CompleteAppReply(message="Appointment Completed")
         
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

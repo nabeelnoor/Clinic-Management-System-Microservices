@@ -20,22 +20,35 @@ import logging
 import grpc
 import RecordService_pb2
 import RecordService_pb2_grpc
-from flask import Flask,jsonify,request
 
 
 
 def run():
 
-    with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
-        stub = RecordService_pb2_grpc.RecordServiceStub(channel)
-        response = stub.SayHelloAgain(RecordService_pb2.HelloRequest(name='you'))
-    print("AuthService client received: " + response.message)
+    # with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
+    #     stub = RecordService_pb2_grpc.RecordServiceStub(channel)
+    #     response = stub.SayHelloAgain(RecordService_pb2.HelloRequest(name='you'))
+    # print("AuthService client received: " + response.message)
 
+    # with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
+    #     stub = RecordService_pb2_grpc.RecordServiceStub(channel)
+    #     response = stub.SayHelloAgain(RecordService_pb2.HelloRequest(name='you'))
+    # print("AuthService client received: " + response.message)
+    
     with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
         stub = RecordService_pb2_grpc.RecordServiceStub(channel)
-        response = stub.SayHelloAgain(RecordService_pb2.HelloRequest(name='you'))
-    print("AuthService client received: " + response.message)
+        response = stub.makeAppointment(RecordService_pb2.MKAppRequest(UserId='zul@gmail.com',EmpId='doc1@gmail.com',Date='07-02-2022',Status=''))
+    print("Patient received: " + response.message)
+    
+    with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
+        stub = RecordService_pb2_grpc.RecordServiceStub(channel)
+        response = stub.getAppointment(RecordService_pb2.getApp())
+    print(response.message)
    
+    with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
+        stub = RecordService_pb2_grpc.RecordServiceStub(channel)
+        response = stub.CompleteAppointment(RecordService_pb2.CompleteApp(UserId='talha@gmail.com',EmpId='doc1@gmail.com',Date='07-02-2022'))
+    print(response.message)
    
 
 if __name__ == '__main__':
