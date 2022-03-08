@@ -24,7 +24,6 @@ package staff;
 // The greeting service definition.
 service StaffManager {
   // manage staff
-  // rpc AddDoctor (AddDoc) returns (AddDocReply) {}
   rpc AddDepart (AddDept) returns (AddDeptReply) {}
   rpc ListDoctor (listDoc) returns (listDocReply) {}
   rpc ListDepart (listDept) returns (listDeptReply) {}
@@ -32,15 +31,14 @@ service StaffManager {
 
 // The request message containing the user's name.
 message AddDoc {
-  int32 EmpID =1;	
+  string EmpID =1;	
   string Qualification=2;
   int32 Fees=3;
   string DeptID=4;
-  string role=5;
+  string Role=5;
   string Name=6;
   string BirthDate=7;
   string Gender=8;
-  string Password=9;
 }
 
 message AddDept {	

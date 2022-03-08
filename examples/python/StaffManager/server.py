@@ -58,9 +58,11 @@ class StaffManager(staff_pb2_grpc.StaffManagerServicer):
         mydb = client["myFirstDatabase"]        
         mycol = mydb["Emp"]
         print(mycol)
-        for x in mycol.find({}, {'_id': False}):
+        for x in mycol.find({}, {'_id': False,"Password":False}):
             print("\ndataType:",x)
-            array.append(x)
+            if(x["DeptID"]==request.deptId):
+                array.append(x)
+
         #print(array)
         return staff_pb2.listDocReply(message=array)
     

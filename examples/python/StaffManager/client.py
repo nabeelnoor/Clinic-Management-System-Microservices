@@ -35,10 +35,10 @@ def run():
         stub = staff_pb2_grpc.StaffManagerStub(channel)
         response = stub.AddDepart(staff_pb2.AddDept(name='Heart'))
     print("Staff client received: " + response.message)
-    # with grpc.insecure_channel('localhost:50053') as channel:
-    #     stub = staff_pb2_grpc.StaffManagerStub(channel)
-    #     response = stub.ListDoctor(staff_pb2.listDoc(deptId="Heart"))
-    # print(response.message)
+    with grpc.insecure_channel('localhost:50053') as channel:
+        stub = staff_pb2_grpc.StaffManagerStub(channel)
+        response = stub.ListDoctor(staff_pb2.listDoc(deptId="Heart2"))
+    print(response.message)
     with grpc.insecure_channel('localhost:50053') as channel:
         stub = staff_pb2_grpc.StaffManagerStub(channel)
         response = stub.ListDepart(staff_pb2.listDept())
