@@ -140,7 +140,7 @@ def DBauthEmp(email,password):
         return False,None
     return True,dbResponse["Role"]
     
-# ---------------------------------------------------------------Databases functions
+# -----------------------------------------------------------------------Databases functions
 class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
 
     def SayHello(self, request, context):
