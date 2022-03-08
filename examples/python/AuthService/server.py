@@ -148,10 +148,12 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
         with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
             stub = StaffManagerStub(channel)
             response = stub.ListDepart(staff_pb2.listDept())
+            print("\n\n-------------OK-------------\n\n")
+            print("Wokring inside:",response)
+            print("Main type is:",type(response))
             for x in response:
                 print(x)
                 array.append(x)
-        # print(response)
         return staff_pb2.listDeptReply(message="response")
 
     def SayHelloAgain(self, request, context):
