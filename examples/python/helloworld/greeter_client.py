@@ -22,6 +22,7 @@ import helloworld_pb2
 import helloworld_pb2_grpc
 import staff_pb2
 import staff_pb2_grpc
+from pymongo import MongoClient 
 
 
 def run():
