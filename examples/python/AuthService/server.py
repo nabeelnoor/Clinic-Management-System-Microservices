@@ -21,8 +21,8 @@ import grpc
 import AuthService_pb2
 import AuthService_pb2_grpc
 
-from StaffManager_pb2_grpc import StaffManagementStub 
-import StaffManager_pb2
+from staff_pb2_grpc import StaffManagerStub
+import staff_pb2
 from pymongo import MongoClient # to make connection with mongoDB
 
 #Databases Schemas
@@ -143,12 +143,16 @@ def DBauthEmp(email,password):
 # -----------------------------------------------------------------------Databases functions
 class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
 
-    def SayHello(self, request, context):
-        with grpc.insecure_channel('localhost:50051') as channel: #for another grpc call
-            stub = StaffManagementStub(channel)
-            response = stub.addDoctorProfile(StaffManager_pb2.DoctorDetials(DoctorID="Doc0001",Password="abcd",Qualification="Qualified",DeptID=100,Fees=2,JobTitle="Senior Doctor"))
-        print("Greeter client received: " + response.message)
-        return AuthService_pb2.HelloReply(message='Hello, %s!' % response)
+    def ListOfAllDept(self, request, context):
+        array=[]
+        with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
+            stub = StaffManagerStub(channel)
+            response = stub.ListDepart(staff_pb2.listDept())
+            for x in response:
+                print(x)
+                array.append(x)
+        # print(response)
+        return staff_pb2.listDeptReply(message="response")
 
     def SayHelloAgain(self, request, context):
         return AuthService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 

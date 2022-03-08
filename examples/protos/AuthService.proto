@@ -19,8 +19,8 @@ option java_package = "io.grpc.examples.AuthService";
 option java_outer_classname = "AuthServiceProto";
 option objc_class_prefix = "HLW";
 
-package AuthService;
-
+package AuthService; 
+import "staff.proto";
 // The greeting service definition.
 service AuthService {
   // Sends a greeting
@@ -33,6 +33,9 @@ service AuthService {
   
   rpc RegisterEmploy (EmployRegisterCredential) returns (EmployRegisterationResponse) {}
   rpc AuthenticateEmploy (EmployCredentialRequest) returns (EmployAuthenticationResponse) {}
+
+  //Calling to MC2
+  rpc ListOfAllDept (staff.listDept) returns (staff.listDeptReply) {}
 }
 
 message UserRegisterCredential{

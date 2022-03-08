@@ -3,6 +3,7 @@
 import grpc
 
 import AuthService_pb2 as AuthService__pb2
+import staff_pb2 as staff__pb2
 
 
 class AuthServiceStub(object):
@@ -49,6 +50,11 @@ class AuthServiceStub(object):
                 '/AuthService.AuthService/AuthenticateEmploy',
                 request_serializer=AuthService__pb2.EmployCredentialRequest.SerializeToString,
                 response_deserializer=AuthService__pb2.EmployAuthenticationResponse.FromString,
+                )
+        self.ListOfAllDept = channel.unary_unary(
+                '/AuthService.AuthService/ListOfAllDept',
+                request_serializer=staff__pb2.listDept.SerializeToString,
+                response_deserializer=staff__pb2.listDeptReply.FromString,
                 )
 
 
@@ -99,6 +105,13 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListOfAllDept(self, request, context):
+        """Calling to MC2
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -136,6 +149,11 @@ def add_AuthServiceServicer_to_server(servicer, server):
                     servicer.AuthenticateEmploy,
                     request_deserializer=AuthService__pb2.EmployCredentialRequest.FromString,
                     response_serializer=AuthService__pb2.EmployAuthenticationResponse.SerializeToString,
+            ),
+            'ListOfAllDept': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListOfAllDept,
+                    request_deserializer=staff__pb2.listDept.FromString,
+                    response_serializer=staff__pb2.listDeptReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -264,5 +282,22 @@ class AuthService(object):
         return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/AuthenticateEmploy',
             AuthService__pb2.EmployCredentialRequest.SerializeToString,
             AuthService__pb2.EmployAuthenticationResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ListOfAllDept(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/ListOfAllDept',
+            staff__pb2.listDept.SerializeToString,
+            staff__pb2.listDeptReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

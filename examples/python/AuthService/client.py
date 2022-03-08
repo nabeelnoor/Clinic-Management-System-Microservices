@@ -71,6 +71,13 @@ def AuthenticateEmp():
         response = stub.AuthenticateEmploy(AuthService_pb2.EmployCredentialRequest(EmpID=reqBody["EmpID"],Password=reqBody["Password"]))
     return jsonify({'response':response.response,'secretKey':response.secretKey})
 
+@app.route("/getDept",methods=['Get'])
+def getAllDept():
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.ListOfAllDept(AuthService_pb2.staff__pb2.listDept())
+    return jsonify({'response':response.response,'secretKey':response.secretKey})
+
 def run():
 
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
