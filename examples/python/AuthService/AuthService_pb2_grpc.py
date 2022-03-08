@@ -56,6 +56,11 @@ class AuthServiceStub(object):
                 request_serializer=staff__pb2.listDept.SerializeToString,
                 response_deserializer=staff__pb2.listDeptReply.FromString,
                 )
+        self.ListOfAllDoctor = channel.unary_unary(
+                '/AuthService.AuthService/ListOfAllDoctor',
+                request_serializer=staff__pb2.listDoc.SerializeToString,
+                response_deserializer=staff__pb2.listDocReply.FromString,
+                )
 
 
 class AuthServiceServicer(object):
@@ -112,6 +117,12 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListOfAllDoctor(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -154,6 +165,11 @@ def add_AuthServiceServicer_to_server(servicer, server):
                     servicer.ListOfAllDept,
                     request_deserializer=staff__pb2.listDept.FromString,
                     response_serializer=staff__pb2.listDeptReply.SerializeToString,
+            ),
+            'ListOfAllDoctor': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListOfAllDoctor,
+                    request_deserializer=staff__pb2.listDoc.FromString,
+                    response_serializer=staff__pb2.listDocReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -299,5 +315,22 @@ class AuthService(object):
         return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/ListOfAllDept',
             staff__pb2.listDept.SerializeToString,
             staff__pb2.listDeptReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ListOfAllDoctor(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/ListOfAllDoctor',
+            staff__pb2.listDoc.SerializeToString,
+            staff__pb2.listDocReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

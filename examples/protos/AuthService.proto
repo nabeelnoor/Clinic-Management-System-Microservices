@@ -36,6 +36,7 @@ service AuthService {
 
   //Calling to MC2
   rpc ListOfAllDept (staff.listDept) returns (staff.listDeptReply) {}
+  rpc ListOfAllDoctor (staff.listDoc) returns (staff.listDocReply) {}
 }
 
 message UserRegisterCredential{

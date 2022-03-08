@@ -14,6 +14,7 @@
 """The Python implementation of the GRPC helloworld.Greeter server."""
 
 from concurrent import futures
+from email import message
 from locale import currency
 import logging
 import hashlib
@@ -155,6 +156,15 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
                 print(x)
                 array.append(x)
         return staff_pb2.listDeptReply(message=array)
+    
+    def ListOfAllDoctor(self, request, context):
+        array=[]
+        with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
+            stub = StaffManagerStub(channel)
+            response = stub.ListDoctor(staff_pb2.listDoc(deptId="Heart"))
+            for x in response.message:
+                array.append(x)
+        return staff_pb2.listDocReply(message=array)
 
     def SayHelloAgain(self, request, context):
         return AuthService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 

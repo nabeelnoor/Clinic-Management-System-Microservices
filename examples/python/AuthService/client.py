@@ -86,6 +86,23 @@ def getAllDept():
     print("After json:",finalResponse)
     return jsonify({'response':finalResponse})
 
+@app.route("/getDoc",methods=['Post'])
+def getAllDoc():
+    reqBody=request.json
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.ListOfAllDoctor(AuthService_pb2.staff__pb2.listDoc(deptId=reqBody["DeptId"]))
+        print(response)
+        finalResponse=[]
+        for each in response.message:
+            print(each)
+            finalResponse.append({"EmpID": each.EmpID,"Qualification":each.Qualification,"Fees":each.Fees,"DeptID":each.DeptID,"Role":each.Role,"Name":each.Name,"BirthDate":each.BirthDate,"Gender":each.Gender })
+    print("finalResponse:",finalResponse)
+    finalResponse=json.dumps(finalResponse)
+    finalResponse=json.loads(finalResponse)
+    print("After json:",finalResponse)
+    return jsonify({'response':finalResponse})
+
 def run():
 
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
