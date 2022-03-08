@@ -17,6 +17,8 @@ from concurrent import futures
 from locale import currency
 import logging
 import hashlib
+from msilib.schema import AppId
+from urllib import response
 import grpc
 import RecordService_pb2
 import RecordService_pb2_grpc
@@ -108,40 +110,8 @@ def DBauthUser(email,password):
         return False
     return True
 
-def isEmpPresent(email):
-    client = mongo()
-    print(client.list_database_names())
-    mydb = client["myFirstDatabase"]        
-    mycol = mydb["Emp"]
-    dbResponse=mycol.find_one({"EmpID":email})
-    print(dbResponse)
-    if(dbResponse==None):
-        return False
-    else:
-        return True
-
-def DBstoreEmp(EmpData):
-    client = mongo()
-    print(client.list_database_names())
-    mydb = client["myFirstDatabase"]        
-    mycol = mydb["Emp"]
-    if(isEmpPresent(EmpData.EmpId)==True):
-        return False
-    currRecord = {"EmpID":EmpData.EmpId,"Name":EmpData.Name,"BirthDate":EmpData.BirthDate,"Password":EmpData.Password,"Gender":EmpData.Gender,"Qualification":EmpData.Qualification,"DeptID":EmpData.DeptID,"Role":EmpData.Role,"Fees":EmpData.Fees}
-    x = mycol.insert_one(currRecord)
+def DBStoreApp():
     return True
-
-def DBauthEmp(email,password):
-    client = mongo()
-    print(client.list_database_names())
-    mydb = client["myFirstDatabase"]        
-    mycol = mydb["Emp"]
-    dbResponse=mycol.find_one({"EmpID":email})
-    if(dbResponse==None):
-        return False,None
-    if(dbResponse["Password"]!=password):
-        return False,None
-    return True,dbResponse["Role"]
     
 # -----------------------------------------------------------------------Databases functions
 class RecordServiceClass(RecordService_pb2_grpc.RecordServiceServicer):
@@ -152,6 +122,12 @@ class RecordServiceClass(RecordService_pb2_grpc.RecordServiceServicer):
     def SayHelloAgain(self, request, context):
         return RecordService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
 
+    def makeAppointment(self, request, context):
+        tokenNumber=-1
+        appID=1
+        if(tokenNumber==-1):
+            return RecordService_pb2.MKAppResponse(response="Unsuccessful",AppId=appID,TokenNumber=tokenNumber)
+        return RecordService_pb2.MKAppResponse(response="Successful",AppId=appID,TokenNumber=tokenNumber)
         
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

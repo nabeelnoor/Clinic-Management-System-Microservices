@@ -28,7 +28,7 @@ def run():
 
     with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
         stub = RecordService_pb2_grpc.RecordServiceStub(channel)
-        response = stub.SayHello(RecordService_pb2.HelloRequest(name='you'))
+        response = stub.SayHelloAgain(RecordService_pb2.HelloRequest(name='you'))
     print("AuthService client received: " + response.message)
 
     with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call

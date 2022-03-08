@@ -13,6 +13,8 @@ service RecordService {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
   rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
   
+  rpc makeAppointment(MKAppRequest) returns (MKAppResponse) {}
+
 }
 
 
@@ -27,11 +29,14 @@ message HelloReply {
   string message = 1;
 }
 
-//for the lottery function 
-message LotteryRequest{
-  int32 randomNumber =1;
+message MKAppRequest{
+    string UserId=1;
+    string EmpId=2;
+    string Date=4;
 }
-//reponse is yes/no
-message LotteryResponse{
-  string response=1;
+
+message MKAppResponse{
+    string response=1;
+    string AppID=2;
+    int32 TokenNumber=3;
 }
