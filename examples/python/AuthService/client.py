@@ -119,6 +119,14 @@ def addAppointment():
         response = stub.MakeAppointment3(AuthService_pb2.RecordService__pb2.MKAppRequest(UserId=reqBody["UserId"],EmpId=reqBody["EmpId"],Date=reqBody["Date"],Status=reqBody["Status"]))
     return jsonify({'response':response.message})
 
+@app.route("/completeAppointment",methods=['Post'])
+def completeAppointmentFunc():
+    reqBody=request.json
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.CompleteAppointment3(AuthService_pb2.RecordService__pb2.CompleteApp(UserId=reqBody["UserId"],EmpId=reqBody["EmpId"],Date=reqBody["Date"]))
+    return jsonify({'response':response.message})
+
 def run():
 
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call

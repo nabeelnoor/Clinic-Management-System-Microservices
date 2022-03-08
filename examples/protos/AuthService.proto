@@ -42,8 +42,8 @@ service AuthService {
 
   //calling service from MC3
   rpc MakeAppointment3 (RecordService.MKAppRequest) returns (RecordService.MKAppResponse) {}
+  rpc CompleteAppointment3 (RecordService.CompleteApp) returns (RecordService.CompleteAppReply) {}
   // rpc GetAppointment3 () returns () {}
-  // rpc CompleteAppointment3 () returns () {}
 }
 
 message UserRegisterCredential{

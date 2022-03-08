@@ -154,6 +154,13 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
             response = stub.makeAppointment(RecordService_pb2.MKAppRequest(UserId=request.UserId,EmpId=request.EmpId,Date=request.Date,Status="false"))
         return RecordService_pb2.MKAppResponse(message=response.message)
 
+    def CompleteAppointment3(self, request, context):
+        print(request.UserId)
+        with grpc.insecure_channel('localhost:50054') as channel:
+            stub=RecordServiceStub(channel)
+            response=stub.CompleteAppointment(RecordService_pb2.CompleteApp(UserId=request.UserId,EmpId=request.EmpId,Date=request.Date))
+        return RecordService_pb2.CompleteAppReply(message=response.message)
+
     def ListOfAllDept(self, request, context):
         array=[]
         with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
