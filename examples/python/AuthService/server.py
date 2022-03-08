@@ -70,7 +70,7 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
         if(request.UserID not in UserDB):
             retmsg="Successful"
             UserDB[request.UserID]=TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender)
-        print("\n---------------------\n")
+        print("\n-----------Inside User Registeration----------\n")
         return AuthService_pb2.UserRegisterationResponse(response=retmsg)
     
     def AuthenticateUser(self, request, context):
@@ -91,6 +91,7 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
     
     def AuthenticateEmploy(self,request,context):
         retMsg="Not Successful"
+        generatedToken="Null"
         if(request.EmpID in EmpDB):
             retMsg="Successful"
             generatedToken=hashlib.sha256(request.EmpID.encode("utf-8")).hexdigest()

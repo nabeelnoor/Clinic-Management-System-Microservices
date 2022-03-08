@@ -20,16 +20,59 @@ import logging
 import grpc
 import AuthService_pb2
 import AuthService_pb2_grpc
+from flask import Flask,jsonify,request
 
+app= Flask(__name__)
+# --------------Sample api for post# --------------Sample api for post# --------------Sample api for post
+@app.route("/samplePost",methods=['Post'])
+def testRoute():
+    reqBody=request.json
+    print(reqBody)
+    print(reqBody['userid'])
+    print(reqBody['password'])
+    return jsonify({'response':"Sample Response"})
+# --------------Sample api for post# --------------Sample api for post# --------------Sample api for post
+
+@app.route("/registerUser",methods=['Post'])
+def registerUser():
+    reqBody=request.json
+    # print(sample) print(sample['UserID']) (sample['Password'])
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.RegisterUser(AuthService_pb2.UserRegisterCredential(UserID=reqBody['UserID'],Name=reqBody['Name'],BirthDate=reqBody['BirthDate'],Password=reqBody['Password'],Gender=reqBody['Gender']))
+    print("AuthService client received: " + response.response)
+    return jsonify({'response':response.response})
+
+@app.route("/authenticateUser",methods=['Post'])
+def AuthenticateUser():
+    reqBody=request.json
+    # print(sample) print(sample['UserID']) (sample['Password'])
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.AuthenticateUser(AuthService_pb2.UserCredentialRequest(UserID=reqBody["UserID"],Password=reqBody["Password"]))
+    return jsonify({'response':response.response,'secretKey':response.secretKey})
+
+@app.route("/registerEmp",methods=['Post'])
+def registerEmp():
+    reqBody=request.json
+    # print(sample) print(sample['UserID']) (sample['Password'])
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.RegisterEmploy(AuthService_pb2.EmployRegisterCredential(EmpID=reqBody["EmpID"],Name=reqBody["Name"],BirthDate=reqBody["BirthDate"],Password=reqBody["Password"],Gender=reqBody["Gender"],Qualification=reqBody["Qualification"],Fees=reqBody["Fees"],role=reqBody["role"],DeptID=reqBody["DeptID"]))
+    print("AuthService client received: " + response.response)
+    return jsonify({'response':response.response})
+
+@app.route("/authenticateEmp",methods=['Post'])
+def AuthenticateEmp():
+    reqBody=request.json
+    # print(sample) print(sample['UserID']) (sample['Password'])
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.AuthenticateEmploy(AuthService_pb2.EmployCredentialRequest(EmpID=reqBody["EmpID"],Password=reqBody["Password"]))
+    return jsonify({'response':response.response,'secretKey':response.secretKey})
 
 def run():
-    # NOTE(gRPC Python Team): .close() is possible on a channel and should be
-    # used in circumstances in which the with statement does not fit the needs
-    # of the code.
-    # with grpc.insecure_channel('localhost:50052') as channel:
-    #     stub = AuthService_pb2_grpc.AuthServiceStub(channel)
-    #     response = stub.SayHello(AuthService_pb2.HelloRequest(name='you'))
-    # print("AuthService client received: " + response.message)
+
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
         stub = AuthService_pb2_grpc.AuthServiceStub(channel)
         response = stub.SayHelloAgain(AuthService_pb2.HelloRequest(name='you'))
@@ -60,7 +103,8 @@ def run():
 
 if __name__ == '__main__':
     logging.basicConfig()
-    run()
+    # run()
+    app.run(debug=True)
 
 
 
