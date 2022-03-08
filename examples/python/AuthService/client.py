@@ -95,7 +95,7 @@ def getAllDoc():
         print(response)
         finalResponse=[]
         for each in response.message:
-            print(each)
+            # print(each)
             finalResponse.append({"EmpID": each.EmpID,"Qualification":each.Qualification,"Fees":each.Fees,"DeptID":each.DeptID,"Role":each.Role,"Name":each.Name,"BirthDate":each.BirthDate,"Gender":each.Gender })
     print("finalResponse:",finalResponse)
     finalResponse=json.dumps(finalResponse)
