@@ -3,6 +3,7 @@
 import grpc
 
 import AuthService_pb2 as AuthService__pb2
+import RecordService_pb2 as RecordService__pb2
 import staff_pb2 as staff__pb2
 
 
@@ -65,6 +66,11 @@ class AuthServiceStub(object):
                 '/AuthService.AuthService/AddDepartment',
                 request_serializer=staff__pb2.AddDept.SerializeToString,
                 response_deserializer=staff__pb2.AddDeptReply.FromString,
+                )
+        self.MakeAppointment3 = channel.unary_unary(
+                '/AuthService.AuthService/MakeAppointment3',
+                request_serializer=RecordService__pb2.MKAppRequest.SerializeToString,
+                response_deserializer=RecordService__pb2.MKAppResponse.FromString,
                 )
 
 
@@ -134,6 +140,13 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def MakeAppointment3(self, request, context):
+        """calling service from MC3
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -186,6 +199,11 @@ def add_AuthServiceServicer_to_server(servicer, server):
                     servicer.AddDepartment,
                     request_deserializer=staff__pb2.AddDept.FromString,
                     response_serializer=staff__pb2.AddDeptReply.SerializeToString,
+            ),
+            'MakeAppointment3': grpc.unary_unary_rpc_method_handler(
+                    servicer.MakeAppointment3,
+                    request_deserializer=RecordService__pb2.MKAppRequest.FromString,
+                    response_serializer=RecordService__pb2.MKAppResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -365,5 +383,22 @@ class AuthService(object):
         return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/AddDepartment',
             staff__pb2.AddDept.SerializeToString,
             staff__pb2.AddDeptReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def MakeAppointment3(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService.AuthService/MakeAppointment3',
+            RecordService__pb2.MKAppRequest.SerializeToString,
+            RecordService__pb2.MKAppResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

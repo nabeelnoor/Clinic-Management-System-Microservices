@@ -21,6 +21,7 @@ option objc_class_prefix = "HLW";
 
 package AuthService; 
 import "staff.proto";
+import "RecordService.proto";
 // The greeting service definition.
 service AuthService {
   // Sends a greeting
@@ -38,6 +39,11 @@ service AuthService {
   rpc ListOfAllDept (staff.listDept) returns (staff.listDeptReply) {}
   rpc ListOfAllDoctor (staff.listDoc) returns (staff.listDocReply) {}
   rpc AddDepartment (staff.AddDept) returns (staff.AddDeptReply) {}
+
+  //calling service from MC3
+  rpc MakeAppointment3 (RecordService.MKAppRequest) returns (RecordService.MKAppResponse) {}
+  // rpc GetAppointment3 () returns () {}
+  // rpc CompleteAppointment3 () returns () {}
 }
 
 message UserRegisterCredential{

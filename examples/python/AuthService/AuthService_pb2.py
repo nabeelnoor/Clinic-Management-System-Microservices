@@ -13,9 +13,10 @@ _sym_db = _symbol_database.Default()
 
 
 import staff_pb2 as staff__pb2
+import RecordService_pb2 as RecordService__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x41uthService.proto\x12\x0b\x41uthService\x1a\x0bstaff.proto\"k\n\x16UserRegisterCredential\x12\x0e\n\x06UserID\x18\x01 \x01(\t\x12\x0c\n\x04Name\x18\x02 \x01(\t\x12\x11\n\tBirthDate\x18\x03 \x01(\t\x12\x10\n\x08Password\x18\x04 \x01(\t\x12\x0e\n\x06Gender\x18\x05 \x01(\t\"-\n\x19UserRegisterationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"9\n\x15UserCredentialRequest\x12\x0e\n\x06UserID\x18\x01 \x01(\t\x12\x10\n\x08Password\x18\x02 \x01(\t\"A\n\x1aUserAuthenticationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\x12\x11\n\tsecretKey\x18\x02 \x01(\t\"\xaf\x01\n\x18\x45mployRegisterCredential\x12\r\n\x05\x45mpID\x18\x01 \x01(\t\x12\x15\n\rQualification\x18\x02 \x01(\t\x12\x0c\n\x04\x46\x65\x65s\x18\x03 \x01(\x05\x12\x0e\n\x06\x44\x65ptID\x18\x04 \x01(\t\x12\x0c\n\x04role\x18\x05 \x01(\t\x12\x0c\n\x04Name\x18\x06 \x01(\t\x12\x11\n\tBirthDate\x18\x07 \x01(\t\x12\x0e\n\x06Gender\x18\x08 \x01(\t\x12\x10\n\x08Password\x18\t \x01(\t\"/\n\x1b\x45mployRegisterationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\":\n\x17\x45mployCredentialRequest\x12\r\n\x05\x45mpID\x18\x01 \x01(\t\x12\x10\n\x08Password\x18\x02 \x01(\t\"C\n\x1c\x45mployAuthenticationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\x12\x11\n\tsecretKey\x18\x02 \x01(\t\"\x1c\n\x0cHelloRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x1d\n\nHelloReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"&\n\x0eLotteryRequest\x12\x14\n\x0crandomNumber\x18\x01 \x01(\x05\"#\n\x0fLotteryResponse\x12\x10\n\x08response\x18\x01 \x01(\t2\xa3\x06\n\x0b\x41uthService\x12@\n\x08SayHello\x12\x19.AuthService.HelloRequest\x1a\x17.AuthService.HelloReply\"\x00\x12\x45\n\rSayHelloAgain\x12\x19.AuthService.HelloRequest\x1a\x17.AuthService.HelloReply\"\x00\x12O\n\x10LotteryGenerator\x12\x1b.AuthService.LotteryRequest\x1a\x1c.AuthService.LotteryResponse\"\x00\x12]\n\x0cRegisterUser\x12#.AuthService.UserRegisterCredential\x1a&.AuthService.UserRegisterationResponse\"\x00\x12\x61\n\x10\x41uthenticateUser\x12\".AuthService.UserCredentialRequest\x1a\'.AuthService.UserAuthenticationResponse\"\x00\x12\x63\n\x0eRegisterEmploy\x12%.AuthService.EmployRegisterCredential\x1a(.AuthService.EmployRegisterationResponse\"\x00\x12g\n\x12\x41uthenticateEmploy\x12$.AuthService.EmployCredentialRequest\x1a).AuthService.EmployAuthenticationResponse\"\x00\x12\x38\n\rListOfAllDept\x12\x0f.staff.listDept\x1a\x14.staff.listDeptReply\"\x00\x12\x38\n\x0fListOfAllDoctor\x12\x0e.staff.listDoc\x1a\x13.staff.listDocReply\"\x00\x12\x36\n\rAddDepartment\x12\x0e.staff.AddDept\x1a\x13.staff.AddDeptReply\"\x00\x42\x38\n\x1cio.grpc.examples.AuthServiceB\x10\x41uthServiceProtoP\x01\xa2\x02\x03HLWb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x41uthService.proto\x12\x0b\x41uthService\x1a\x0bstaff.proto\x1a\x13RecordService.proto\"k\n\x16UserRegisterCredential\x12\x0e\n\x06UserID\x18\x01 \x01(\t\x12\x0c\n\x04Name\x18\x02 \x01(\t\x12\x11\n\tBirthDate\x18\x03 \x01(\t\x12\x10\n\x08Password\x18\x04 \x01(\t\x12\x0e\n\x06Gender\x18\x05 \x01(\t\"-\n\x19UserRegisterationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"9\n\x15UserCredentialRequest\x12\x0e\n\x06UserID\x18\x01 \x01(\t\x12\x10\n\x08Password\x18\x02 \x01(\t\"A\n\x1aUserAuthenticationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\x12\x11\n\tsecretKey\x18\x02 \x01(\t\"\xaf\x01\n\x18\x45mployRegisterCredential\x12\r\n\x05\x45mpID\x18\x01 \x01(\t\x12\x15\n\rQualification\x18\x02 \x01(\t\x12\x0c\n\x04\x46\x65\x65s\x18\x03 \x01(\x05\x12\x0e\n\x06\x44\x65ptID\x18\x04 \x01(\t\x12\x0c\n\x04role\x18\x05 \x01(\t\x12\x0c\n\x04Name\x18\x06 \x01(\t\x12\x11\n\tBirthDate\x18\x07 \x01(\t\x12\x0e\n\x06Gender\x18\x08 \x01(\t\x12\x10\n\x08Password\x18\t \x01(\t\"/\n\x1b\x45mployRegisterationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\":\n\x17\x45mployCredentialRequest\x12\r\n\x05\x45mpID\x18\x01 \x01(\t\x12\x10\n\x08Password\x18\x02 \x01(\t\"C\n\x1c\x45mployAuthenticationResponse\x12\x10\n\x08response\x18\x01 \x01(\t\x12\x11\n\tsecretKey\x18\x02 \x01(\t\"\x1c\n\x0cHelloRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x1d\n\nHelloReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"&\n\x0eLotteryRequest\x12\x14\n\x0crandomNumber\x18\x01 \x01(\x05\"#\n\x0fLotteryResponse\x12\x10\n\x08response\x18\x01 \x01(\t2\xf4\x06\n\x0b\x41uthService\x12@\n\x08SayHello\x12\x19.AuthService.HelloRequest\x1a\x17.AuthService.HelloReply\"\x00\x12\x45\n\rSayHelloAgain\x12\x19.AuthService.HelloRequest\x1a\x17.AuthService.HelloReply\"\x00\x12O\n\x10LotteryGenerator\x12\x1b.AuthService.LotteryRequest\x1a\x1c.AuthService.LotteryResponse\"\x00\x12]\n\x0cRegisterUser\x12#.AuthService.UserRegisterCredential\x1a&.AuthService.UserRegisterationResponse\"\x00\x12\x61\n\x10\x41uthenticateUser\x12\".AuthService.UserCredentialRequest\x1a\'.AuthService.UserAuthenticationResponse\"\x00\x12\x63\n\x0eRegisterEmploy\x12%.AuthService.EmployRegisterCredential\x1a(.AuthService.EmployRegisterationResponse\"\x00\x12g\n\x12\x41uthenticateEmploy\x12$.AuthService.EmployCredentialRequest\x1a).AuthService.EmployAuthenticationResponse\"\x00\x12\x38\n\rListOfAllDept\x12\x0f.staff.listDept\x1a\x14.staff.listDeptReply\"\x00\x12\x38\n\x0fListOfAllDoctor\x12\x0e.staff.listDoc\x1a\x13.staff.listDocReply\"\x00\x12\x36\n\rAddDepartment\x12\x0e.staff.AddDept\x1a\x13.staff.AddDeptReply\"\x00\x12O\n\x10MakeAppointment3\x12\x1b.RecordService.MKAppRequest\x1a\x1c.RecordService.MKAppResponse\"\x00\x42\x38\n\x1cio.grpc.examples.AuthServiceB\x10\x41uthServiceProtoP\x01\xa2\x02\x03HLWb\x06proto3')
 
 
 
@@ -120,30 +121,30 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n\034io.grpc.examples.AuthServiceB\020AuthServiceProtoP\001\242\002\003HLW'
-  _USERREGISTERCREDENTIAL._serialized_start=47
-  _USERREGISTERCREDENTIAL._serialized_end=154
-  _USERREGISTERATIONRESPONSE._serialized_start=156
-  _USERREGISTERATIONRESPONSE._serialized_end=201
-  _USERCREDENTIALREQUEST._serialized_start=203
-  _USERCREDENTIALREQUEST._serialized_end=260
-  _USERAUTHENTICATIONRESPONSE._serialized_start=262
-  _USERAUTHENTICATIONRESPONSE._serialized_end=327
-  _EMPLOYREGISTERCREDENTIAL._serialized_start=330
-  _EMPLOYREGISTERCREDENTIAL._serialized_end=505
-  _EMPLOYREGISTERATIONRESPONSE._serialized_start=507
-  _EMPLOYREGISTERATIONRESPONSE._serialized_end=554
-  _EMPLOYCREDENTIALREQUEST._serialized_start=556
-  _EMPLOYCREDENTIALREQUEST._serialized_end=614
-  _EMPLOYAUTHENTICATIONRESPONSE._serialized_start=616
-  _EMPLOYAUTHENTICATIONRESPONSE._serialized_end=683
-  _HELLOREQUEST._serialized_start=685
-  _HELLOREQUEST._serialized_end=713
-  _HELLOREPLY._serialized_start=715
-  _HELLOREPLY._serialized_end=744
-  _LOTTERYREQUEST._serialized_start=746
-  _LOTTERYREQUEST._serialized_end=784
-  _LOTTERYRESPONSE._serialized_start=786
-  _LOTTERYRESPONSE._serialized_end=821
-  _AUTHSERVICE._serialized_start=824
-  _AUTHSERVICE._serialized_end=1627
+  _USERREGISTERCREDENTIAL._serialized_start=68
+  _USERREGISTERCREDENTIAL._serialized_end=175
+  _USERREGISTERATIONRESPONSE._serialized_start=177
+  _USERREGISTERATIONRESPONSE._serialized_end=222
+  _USERCREDENTIALREQUEST._serialized_start=224
+  _USERCREDENTIALREQUEST._serialized_end=281
+  _USERAUTHENTICATIONRESPONSE._serialized_start=283
+  _USERAUTHENTICATIONRESPONSE._serialized_end=348
+  _EMPLOYREGISTERCREDENTIAL._serialized_start=351
+  _EMPLOYREGISTERCREDENTIAL._serialized_end=526
+  _EMPLOYREGISTERATIONRESPONSE._serialized_start=528
+  _EMPLOYREGISTERATIONRESPONSE._serialized_end=575
+  _EMPLOYCREDENTIALREQUEST._serialized_start=577
+  _EMPLOYCREDENTIALREQUEST._serialized_end=635
+  _EMPLOYAUTHENTICATIONRESPONSE._serialized_start=637
+  _EMPLOYAUTHENTICATIONRESPONSE._serialized_end=704
+  _HELLOREQUEST._serialized_start=706
+  _HELLOREQUEST._serialized_end=734
+  _HELLOREPLY._serialized_start=736
+  _HELLOREPLY._serialized_end=765
+  _LOTTERYREQUEST._serialized_start=767
+  _LOTTERYREQUEST._serialized_end=805
+  _LOTTERYRESPONSE._serialized_start=807
+  _LOTTERYRESPONSE._serialized_end=842
+  _AUTHSERVICE._serialized_start=845
+  _AUTHSERVICE._serialized_end=1729
 # @@protoc_insertion_point(module_scope)

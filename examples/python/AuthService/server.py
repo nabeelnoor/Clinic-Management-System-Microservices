@@ -24,6 +24,9 @@ import AuthService_pb2_grpc
 
 from staff_pb2_grpc import StaffManagerStub
 import staff_pb2
+
+from RecordService_pb2_grpc import RecordServiceStub
+import RecordService_pb2
 from pymongo import MongoClient # to make connection with mongoDB
 
 #Databases Schemas
@@ -143,6 +146,13 @@ def DBauthEmp(email,password):
     
 # -----------------------------------------------------------------------Databases functions
 class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
+
+    # -----------------------------------MC3
+    def MakeAppointment3(self, request, context):
+        with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
+            stub = RecordServiceStub(channel)
+            response = stub.makeAppointment(RecordService_pb2.MKAppRequest(UserId=request.UserId,EmpId=request.EmpId,Date=request.Date,Status="false"))
+        return RecordService_pb2.MKAppResponse(message=response.message)
 
     def ListOfAllDept(self, request, context):
         array=[]

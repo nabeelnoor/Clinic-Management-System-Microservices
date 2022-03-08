@@ -111,6 +111,14 @@ def addDepartment():
         response = stub.AddDepartment(AuthService_pb2.staff__pb2.AddDept(name=reqBody["name"]))
     return jsonify({'response':response.message})
 
+@app.route("/makeAppointment",methods=['Post'])
+def addAppointment():
+    reqBody=request.json
+    with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
+        stub = AuthService_pb2_grpc.AuthServiceStub(channel)
+        response = stub.MakeAppointment3(AuthService_pb2.RecordService__pb2.MKAppRequest(UserId=reqBody["UserId"],EmpId=reqBody["EmpId"],Date=reqBody["Date"],Status=reqBody["Status"]))
+    return jsonify({'response':response.message})
+
 def run():
 
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
