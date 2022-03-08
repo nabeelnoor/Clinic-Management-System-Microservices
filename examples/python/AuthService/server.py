@@ -151,10 +151,10 @@ class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
             print("\n\n-------------OK-------------\n\n")
             print("Wokring inside:",response)
             print("Main type is:",type(response))
-            for x in response:
+            for x in response.message:  #to covert particular into array(main bug)
                 print(x)
                 array.append(x)
-        return staff_pb2.listDeptReply(message="response")
+        return staff_pb2.listDeptReply(message=array)
 
     def SayHelloAgain(self, request, context):
         return AuthService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 

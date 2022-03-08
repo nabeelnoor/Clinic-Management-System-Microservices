@@ -16,7 +16,7 @@
 from __future__ import print_function
 
 import logging
-
+import json
 import grpc
 import AuthService_pb2
 import AuthService_pb2_grpc
@@ -76,7 +76,15 @@ def getAllDept():
     with grpc.insecure_channel('localhost:50052') as channel: #for another grpc call
         stub = AuthService_pb2_grpc.AuthServiceStub(channel)
         response = stub.ListOfAllDept(AuthService_pb2.staff__pb2.listDept())
-    return jsonify({'response':response.response,'secretKey':response.secretKey})
+        finalResponse=[]
+        for each in response.message:
+            print(each)
+            finalResponse.append({"name": each.name })
+    print("finalResponse:",finalResponse)
+    finalResponse=json.dumps(finalResponse)
+    finalResponse=json.loads(finalResponse)
+    print("After json:",finalResponse)
+    return jsonify({'response':finalResponse})
 
 def run():
 
