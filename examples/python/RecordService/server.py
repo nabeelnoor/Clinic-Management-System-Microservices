@@ -66,7 +66,7 @@ globalClient=None
 def mongo():
     global globalClient #to use it as the global variable
     if(globalClient==None):
-        cluster = "mongodb+srv://zulfi:zulkifal123@cluster0.bmxg5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+        cluster = "mongodb+srv://HAdmin:nabeel123@cluster0.ypgny.mongodb.net/HMSDB?retryWrites=true&w=majority"
         client = MongoClient(cluster)
         # print(client.list_database_names())
         db = client.myFirstDatabase
@@ -74,7 +74,6 @@ def mongo():
         return globalClient
     else:
         return globalClient
-# my global working space act as db
 
 # ---------------------------------------------------------------Databases functions
 def isUserPresent(email):
