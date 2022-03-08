@@ -54,7 +54,7 @@ class StaffManager(staff_pb2_grpc.StaffManagerServicer):
     def AddDoctor(self, request, context):
         client = mongo()
         print(client.list_database_names())
-        mydb = client["myFirstDatabase"]
+        mydb = client["myFirstDatabase"]        
         mycol = mydb["doctors"]
         mydict = {"name": request.name, "title": request.title}
         x = mycol.insert_one(mydict)
@@ -62,7 +62,7 @@ class StaffManager(staff_pb2_grpc.StaffManagerServicer):
 
 
 def serve():
-    # client=mongo()
+    # client=mongo() pip install pymongo dnspython
     # print(client.list_database_names())
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
