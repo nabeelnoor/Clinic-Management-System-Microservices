@@ -14,12 +14,12 @@
 """The Python implementation of the GRPC helloworld.Greeter server."""
 
 from concurrent import futures
-from email import message
-from locale import currency
+# from email import message
+# from locale import currency
 import logging
-import hashlib
-from msilib.schema import AppId
-from urllib import response
+# import hashlib
+# from msilib.schema import AppId
+# from urllib import response
 import grpc
 import RecordService_pb2
 import RecordService_pb2_grpc
