@@ -1,0 +1,5 @@
+docker image build -t mc2_docker .
+docker run -p 50053:50053 -d mc2_docker
+
+
+## allocated to container : run on the container
