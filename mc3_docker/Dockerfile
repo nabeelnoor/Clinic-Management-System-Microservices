@@ -1,5 +1,7 @@
 # start by pulling the python image
 FROM python:3.9.7-alpine3.14
+ENV PORT 8080
+EXPOSE 8080
 
 RUN pip install --upgrade pip
 # RUN pip install logging
