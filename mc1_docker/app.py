@@ -1,32 +1,13 @@
-# Copyright 2015 gRPC authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""The Python implementation of the GRPC helloworld.Greeter server."""
+from __future__ import print_function
 
+import json
+from flask import Flask,jsonify,request,render_template
+import os
 from concurrent import futures
 from email import message
 from locale import currency
 import logging
 import hashlib
-import grpc
-import AuthService_pb2
-import AuthService_pb2_grpc
-
-from staff_pb2_grpc import StaffManagerStub
-import staff_pb2
-
-from RecordService_pb2_grpc import RecordServiceStub
-import RecordService_pb2
 from pymongo import MongoClient # to make connection with mongoDB
 
 #Databases Schemas
@@ -143,117 +124,75 @@ def DBauthEmp(email,password):
     if(dbResponse["Password"]!=password):
         return False,None
     return True,dbResponse["Role"]
-    
+
 # -----------------------------------------------------------------------Databases functions
-class AuthServiceClass(AuthService_pb2_grpc.AuthServiceServicer):
+app= Flask(__name__)
 
-    # -----------------------------------MC3
-    def MakeAppointment3(self, request, context):
-        with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
-            stub = RecordServiceStub(channel)
-            response = stub.makeAppointment(RecordService_pb2.MKAppRequest(UserId=request.UserId,EmpId=request.EmpId,Date=request.Date,Status="false"))
-        return RecordService_pb2.MKAppResponse(message=response.message)
+@app.route('/')
+def handShake():
+    return jsonify({"response":"handshake from mc1"})
 
-    def CompleteAppointment3(self, request, context):
-        print(request.UserId)
-        with grpc.insecure_channel('localhost:50054') as channel:
-            stub=RecordServiceStub(channel)
-            response=stub.CompleteAppointment(RecordService_pb2.CompleteApp(UserId=request.UserId,EmpId=request.EmpId,Date=request.Date))
-        return RecordService_pb2.CompleteAppReply(message=response.message)
+@app.route("/registerUser",methods=['Post'])
+def registerUser():
+    retmsg="Not Successful"
+    reqBody=request.json
+    _name=reqBody["Name"]
+    _userId=reqBody["UserID"]
+    _password=reqBody["Password"]
+    _birthDate=reqBody["BirthDate"]
+    _gender=reqBody["Gender"]
+    currUser=TestUser(_name,_userId,_password,_birthDate,_gender)
+    dbResponse=DBStoreUser(currUser)
+    if(dbResponse==True):
+        retmsg="Successful"
+    return jsonify({"response":retmsg})
+
+@app.route("/authenticateUser",methods=['Post'])
+def AuthenticateUser():
+    reqBody=request.json
+    _userId=reqBody["UserId"]
+    _password=reqBody["Password"]
+    retMsg="Not Successful"
+    generatedToken="Null"
+    if(DBauthUser(_userId,_password)==True):
+        retMsg="Successful"
+        generatedToken=hashlib.sha256(_userId.encode("utf-8")).hexdigest()
+        TokenDB[_userId]=SecretClass(generatedToken,"user")
+    return jsonify({"response":retMsg,"secretKey":generatedToken})
+
+@app.route("/registerEmploy",methods=['Post'])
+def RegisterEmploy():
+    retMsg="Not Successful"
+    reqBody=request.json
+    _empId=reqBody["EmpID"]
+    _name=reqBody["Name"]
+    _birthDate=reqBody["BirthDate"]
+    _gender=reqBody["Gender"]
+    _qualification=reqBody["Qualification"]
+    _fees=reqBody["Fees"]
+    _deptId=reqBody["DeptID"]
+    _role=reqBody["role"]
+    _password=reqBody["Password"]
+    currEmp=TestEmploy(_empId,_name,_birthDate,_gender,_qualification,_fees,_deptId,_role,_password)
+    if(DBstoreEmp(currEmp)==True):
+        retMsg="Successful"
+    return jsonify({"response":retMsg})
+
+@app.route("/authenticateEmploy",methods=["Post"])
+def AuthenticateEmploy():
+    reqBody=request.json
+    _empId=reqBody["EmpID"]
+    _password=reqBody["Password"]
+    retMsg="Not Successful"
+    generatedToken="Null"
+    flag,responseRole=DBauthEmp(_empId,_password)
+    if(flag==True):
+        retMsg="Successful"
+        generatedToken=hashlib.sha256(_empId.encode("utf-8")).hexdigest()
+        print("CurrentRole:",responseRole)
+        TokenDB[_empId]=SecretClass(generatedToken,responseRole)
+    return jsonify({"reponse":retMsg,"secretKey":generatedToken})
     
-    def GetAllAppointment(self,request,context):
-        array=[]
-        with grpc.insecure_channel('localhost:50054') as channel: #for another grpc call
-            stub = RecordServiceStub(channel)
-            response = stub.CompleteAppointment(RecordService_pb2.getApp())
-            print("\n\n-------------OK-------------\n\n")
-            print("Wokring inside:",response)
-            print("Main type is:",type(response))
-            for x in response.message:  #to covert particular into array(main bug)
-                print(x)
-                array.append(x)
-        return RecordService_pb2.getAppReply(message=array)
-
-    def ListOfAllDept(self, request, context):
-        array=[]
-        with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
-            stub = StaffManagerStub(channel)
-            response = stub.ListDepart(staff_pb2.listDept())
-            print("\n\n-------------OK-------------\n\n")
-            print("Wokring inside:",response)
-            print("Main type is:",type(response))
-            for x in response.message:  #to covert particular into array(main bug)
-                print(x)
-                array.append(x)
-        return staff_pb2.listDeptReply(message=array)
-    
-    def ListOfAllDoctor(self, request, context):
-        array=[]
-        with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
-            stub = StaffManagerStub(channel)
-            response = stub.ListDoctor(staff_pb2.listDoc(deptId=request.deptId))
-            for x in response.message:
-                array.append(x)
-        return staff_pb2.listDocReply(message=array)
-    
-    def AddDepartment(self, request, context):
-        with grpc.insecure_channel('localhost:50053') as channel: #for another grpc call
-            stub = StaffManagerStub(channel)
-            response = stub.AddDepart(staff_pb2.AddDept(name=request.name))
-        return staff_pb2.AddDeptReply(message=response.message)
-
-    def SayHelloAgain(self, request, context):
-        return AuthService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
-
-    def RegisterUser(self,request,context):
-        retmsg="Not Successful"
-        currUser=TestUser(request.Name,request.UserID,request.Password,request.BirthDate,request.Gender)
-        dbResponse=DBStoreUser(currUser)
-        if(dbResponse==True):
-            retmsg="Successful"
-        print("\n-----------Inside User Registeration----------\n")
-        return AuthService_pb2.UserRegisterationResponse(response=retmsg)
-    
-    def AuthenticateUser(self, request, context):
-        retMsg="Not Successful"
-        generatedToken="Null"
-        if(DBauthUser(request.UserID,request.Password)==True):
-            retMsg="Successful"
-            generatedToken=hashlib.sha256(request.UserID.encode("utf-8")).hexdigest()
-            TokenDB[request.UserID]=SecretClass(generatedToken,"user")
-        return AuthService_pb2.UserAuthenticationResponse(response=retMsg,secretKey=generatedToken)
-    
-    def RegisterEmploy(self,request,context):
-        retMsg="Not Successful"
-        currEmp=TestEmploy(request.EmpID,request.Name,request.BirthDate,request.Gender,request.Qualification,request.Fees,request.DeptID,request.role,request.Password)
-        if(DBstoreEmp(currEmp)==True):
-            retMsg="Successful"
-        return AuthService_pb2.EmployRegisterationResponse(response=retMsg)
-    
-    def AuthenticateEmploy(self,request,context):
-        retMsg="Not Successful"
-        generatedToken="Null"
-        flag,responseRole=DBauthEmp(request.EmpID,request.Password)
-        if(flag==True):
-            retMsg="Successful"
-            generatedToken=hashlib.sha256(request.EmpID.encode("utf-8")).hexdigest()
-            print("CurrentRole:",responseRole)
-            TokenDB[request.EmpID]=SecretClass(generatedToken,responseRole)
-        return AuthService_pb2.EmployAuthenticationResponse(response=retMsg,secretKey=generatedToken)
-        
-def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    AuthService_pb2_grpc.add_AuthServiceServicer_to_server(AuthServiceClass(), server)
-    server.add_insecure_port('[::]:50052')
-    server.start()
-    server.wait_for_termination()
-
-
 if __name__ == '__main__':
-    logging.basicConfig()
-    serve()
-
-# def triggerMain(): #function that will call from outside of file.
-#     logging.basicConfig()
-#     serve()
-
+    port = int(os.environ.get('PORT', 8080))
+    app.run(debug=True, host='0.0.0.0', port=port)
