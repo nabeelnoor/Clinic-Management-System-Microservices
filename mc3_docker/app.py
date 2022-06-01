@@ -1,32 +1,12 @@
-# Copyright 2015 gRPC authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""The Python implementation of the GRPC helloworld.Greeter server."""
+from __future__ import print_function
 
+import json
+from flask import Flask,jsonify,request,render_template
+import os
 from concurrent import futures
-# from email import message
-# from locale import currency
 import logging
-# import hashlib
-# from msilib.schema import AppId
-# from urllib import response
-import grpc
-import RecordService_pb2
-import RecordService_pb2_grpc
-
-# from StaffManager_pb2_grpc import StaffManagementStub 
-# import StaffManager_pb2
 from pymongo import MongoClient # to make connection with mongoDB
+app= Flask(__name__)
 
 #Databases Schemas
 class Payment:
@@ -112,57 +92,55 @@ def DBauthUser(email,password):
 
 def DBStoreApp():
     return True
-    
-# -----------------------------------------------------------------------Databases functions
-class RecordServiceClass(RecordService_pb2_grpc.RecordServiceServicer):
 
-    def SayHello(self, request, context):
-        return RecordService_pb2.HelloReply(message='Hello')
 
-    def SayHelloAgain(self, request, context):
-        return RecordService_pb2.HelloReply(message='Hello Again, %s!' % request.name) 
 
-    def makeAppointment(self, request, context):
-        client = mongo()
-        mydb = client["myFirstDatabase"]        
-        mycol = mydb["appointment"]
-        appoint = {"UserId":request.UserId,"EmpId":request.EmpId,"Date":request.Date,"Status":'false'}
-        x = mycol.insert_one(appoint)      #insert appointment of an user with empid
-        return RecordService_pb2.MKAppResponse(message="Appointment Booked Successfully at "+request.Date)
-    
-    def getAppointment(self, request, context):
-        client = mongo()
-        array = []
-        print(client.list_database_names())
-        mydb = client["myFirstDatabase"]        
-        mycol = mydb["appointment"]
-        print(mycol)
-        for x in mycol.find({"Status":"false"}, {'_id': False}):
-            # print(x)
-            array.append(x)  #returns list of all appointments
-        #print(array)
-        return RecordService_pb2.getAppReply(message=array)
-    
-    def CompleteAppointment(self, request, context):
-        client = mongo()
-        array = []
-        print(client.list_database_names())
-        mydb = client["myFirstDatabase"]        
-        mycol = mydb["appointment"]
-        myquery = { "UserId": request.UserId,"EmpId":request.EmpId,"Date":request.Date }
-        newvalues = { "$set": { "Status": "true" } }
+@app.route("/makeAppointment",methods=['Get'])
+def handshake():
+    return jsonify({'response':'Hello from mc3'})
 
-        mycol.update_one(myquery, newvalues)
-        return RecordService_pb2.CompleteAppReply(message="Appointment Completed")
-        
-def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    RecordService_pb2_grpc.add_RecordServiceServicer_to_server(RecordServiceClass(), server)
-    server.add_insecure_port('[::]:50054')
-    server.start()
-    server.wait_for_termination()
+@app.route("/makeAppointment",methods=['Post'])
+def makeAppointment():
+    reqBody=request.json
+    _Date=reqBody["Date"]
+    _EmpId=reqBody["EmpId"]
+    _UserId=reqBody["UserId"]
+    client = mongo()
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["appointment"]
+    appoint = {"UserId":_UserId,"EmpId":_EmpId,"Date":_Date,"Status":'false'}
+    x = mycol.insert_one(appoint)      #insert appointment of an user with empid
+    return jsonify({'result':'Appointment booked successfully at'+_Date})
+    # return json.dumps({'name': 'alice',
+    #                    'email': 'alice@outlook.com'})
 
+@app.route("/getAppointment",methods=['Get'])
+def getAppointment():
+    client = mongo()
+    array = []
+    print(client.list_database_names())
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["appointment"]
+    print(mycol)
+    for x in mycol.find({"Status":"false"}, {'_id': False}):
+        array.append(x)  #returns list of all appointments
+    return jsonify({'appointments':array})
+
+@app.route("/completeAppointment",methods=['Post'])
+def CompleteAppointment():
+    reqBody=request.json
+    _Date=reqBody["Date"]
+    _EmpId=reqBody["EmpId"]
+    _UserId=reqBody["UserId"]
+    client = mongo()
+    array = []
+    mydb = client["myFirstDatabase"]        
+    mycol = mydb["appointment"]
+    myquery = { "UserId": _UserId,"EmpId":_EmpId,"Date":_Date }
+    newvalues = { "$set": { "Status": "true" } }
+    mycol.update_one(myquery, newvalues)
+    return jsonify({'response':"Appointment Completed"})
 
 if __name__ == '__main__':
-    logging.basicConfig()
-    serve()
+    port = int(os.environ.get('PORT', 50054))
+    app.run(debug=True, host='0.0.0.0', port=port)
