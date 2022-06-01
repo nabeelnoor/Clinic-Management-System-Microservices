@@ -1,0 +1,27 @@
+                            Divide application into 3 microservices.
+                            
+---the docker_client --> has no physical deploy, it is just template and for practice, there is detailed documentation on the docker file of that for the
+unsderstanding of how to deploy docker container on azure web app services. (in nutshell-- make build --> creates image,rename that image with repository name(of dockerDesktop),push to dockerhub,goto azure web app,fill the form to deploy.)
+
+---read the dockerfile of clientDocker folder.
+
+---Microservices
+
+--MC1
+[POST]registerUser
+[POST]authenticateUser
+[POST]registerEmploy
+[POST]authenticateEmploy
+
+--MC2
+[GET]listDept
+[POST]listDoctors
+[POST]addDept
+
+--MC3
+[POST]getAppointment
+[POST]completeAppointment
+[GET]makeAppointment
+
+
+--- Note: there is no transformation done on docker_client folder,it is as it is(contain configuration of grpc---since i have not deployed it)
