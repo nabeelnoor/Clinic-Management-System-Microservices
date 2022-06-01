@@ -1,0 +1,5 @@
+docker image build -t mc3_docker .
+docker run -p 50054:50054 -d mc3_docker
+
+
+## allocated to container : run on the container

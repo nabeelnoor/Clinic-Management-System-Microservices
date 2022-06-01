@@ -1,0 +1,2 @@
+docker image build -t client_docker .
+docker run -p 5000:5000 -d client_docker
